@@ -920,4 +920,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appSettingsOpened => 'Opening app permissions...';
+
+  @override
+  String get errorPeerProtocolMissing =>
+      'The other device isn\'t running Kabelos. Please make sure both devices have Kabelos installed and open.';
+
+  @override
+  String get errorPeerProtocolMissingTitle => 'Incompatible app';
+
+  @override
+  String get errorSessionFailed =>
+      'Connection lost. Please try connecting again.';
+
+  @override
+  String get errorSessionFailedTitle => 'Connection failed';
+
+  @override
+  String get errorWifiDirectGroupLost =>
+      'Wi-Fi Direct connection was lost. This can happen if devices move too far apart or Wi-Fi is turned off.';
+
+  @override
+  String get errorWifiDirectGroupLostTitle => 'Connection lost';
+
+  @override
+  String get errorPermissionDenied =>
+      'Permission denied. Please enable all required permissions in Settings.';
+
+  @override
+  String get errorPermissionDeniedTitle => 'Permission needed';
+
+  @override
+  String get errorConnectionRejected =>
+      'The other device declined the connection. Please try again.';
+
+  @override
+  String get errorConnectionRejectedTitle => 'Connection declined';
+
+  @override
+  String get errorConnectionTimeout =>
+      'Connection timed out. Make sure both devices are close and try again.';
+
+  @override
+  String get errorConnectionTimeoutTitle => 'Connection timed out';
+
+  @override
+  String get errorWifiOff =>
+      'Wi-Fi is turned off. Please turn on Wi-Fi to use Kabelos.';
+
+  @override
+  String get errorWifiOffTitle => 'Wi-Fi is off';
+
+  @override
+  String get errorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get errorUnknownTitle => 'Error';
+
+  @override
+  String get errorFileTransferFailed =>
+      'File transfer failed. Please try sending again.';
+
+  @override
+  String get errorFileTransferFailedTitle => 'Transfer failed';
+
+  @override
+  String get errorAudioNotSupported =>
+      'Audio Link isn\'t supported on this device or connection.';
+
+  @override
+  String get errorAudioNotSupportedTitle => 'Audio not available';
+
+  @override
+  String get retryButton => 'Try again';
+
+  @override
+  String get openSettingsButton => 'Open Settings';
 }

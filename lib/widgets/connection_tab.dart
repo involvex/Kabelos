@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../models/wifi_direct_models.dart';
 import '../controllers/wifi_direct_controller.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/error_messages.dart';
 import '../screens/setup_check_screen.dart';
 import '../screens/device_info_screen.dart';
 import '../screens/qr_pairing_screen.dart';
@@ -26,6 +27,8 @@ class ConnectionTab extends StatelessWidget {
           _buildWifiP2pStatus(context),
           // Connection Status
           _buildConnectionStatus(context),
+          // User-friendly error messages
+          _buildErrorBanner(context),
           // Control Buttons
           _buildControlButtons(context),
           // Peers List
@@ -89,7 +92,11 @@ class ConnectionTab extends StatelessWidget {
                 ),
                 if (state.lastNativeError != null)
                   Text(
-                    state.lastNativeError!,
+                    ErrorMessages.localizeTitle(
+                          context,
+                          state.lastNativeError!,
+                        ) ??
+                        state.lastNativeError!,
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 12,
@@ -106,11 +113,16 @@ class ConnectionTab extends StatelessWidget {
 
   Widget _buildConnectionStatus(BuildContext context) {
     final hasWifiDirectLink = state.hasWifiDirectLink;
+    final l10n = AppLocalizations.of(context)!;
+    final localizedSessionState = ErrorMessages.localizeSessionState(
+      context,
+      state.sessionState,
+    );
     final statusText = hasWifiDirectLink
-        ? '${AppLocalizations.of(context)!.connected} / ${state.sessionState}'
+        ? '${l10n.connected} / $localizedSessionState'
         : state.isConnecting
         ? 'Connecting to ${_pendingPeerLabel()}'
-        : AppLocalizations.of(context)!.disconnected;
+        : l10n.disconnected;
 
     return Container(
       width: double.infinity,
@@ -139,6 +151,96 @@ class ConnectionTab extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildErrorBanner(BuildContext context) {
+    final errorMessages = <({String title, String body})>[];
+    final l10n = AppLocalizations.of(context)!;
+
+    final disconnectReason = state.disconnectReason;
+    if (disconnectReason != null && disconnectReason.isNotEmpty) {
+      final title = ErrorMessages.localizeTitle(context, disconnectReason);
+      final body = ErrorMessages.localizeBody(context, disconnectReason);
+      if (title != null && body != null) {
+        errorMessages.add((title: title, body: body));
+      }
+    }
+
+    final lastNativeError = state.lastNativeError;
+    if (lastNativeError != null && lastNativeError.isNotEmpty) {
+      final title = ErrorMessages.localizeTitle(context, lastNativeError);
+      final body = ErrorMessages.localizeBody(context, lastNativeError);
+      if (title != null && body != null) {
+        errorMessages.add((title: title, body: body));
+      }
+    }
+
+    if (state.sessionState == 'Failed') {
+      final title = l10n.errorSessionFailedTitle;
+      final body = l10n.errorSessionFailed;
+      errorMessages.add((title: title, body: body));
+    }
+
+    if (errorMessages.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.red.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Colors.red.withValues(alpha: 0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final msg in errorMessages) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    size: 20,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          msg.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          msg.body,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (msg != errorMessages.last) const SizedBox(height: 12),
+            ],
+          ],
+        ),
       ),
     );
   }

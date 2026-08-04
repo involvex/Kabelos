@@ -1065,5 +1065,94 @@
   "appSettingsOpened": "Opening app permissions...",
   "@appSettingsOpened": {
     "description": "Toast when opening app permissions"
+  },
+
+  "errorPeerProtocolMissing": "The other device isn't running Kabelos. Please make sure both devices have Kabelos installed and open.",
+  "@errorPeerProtocolMissing": {
+    "description": "User-friendly message for peer protocol missing"
+  },
+  "errorPeerProtocolMissingTitle": "Incompatible app",
+  "@errorPeerProtocolMissingTitle": {
+    "description": "Title for peer protocol missing error"
+  },
+  "errorSessionFailed": "Connection lost. Please try connecting again.",
+  "@errorSessionFailed": {
+    "description": "User-friendly message for session failure"
+  },
+  "errorSessionFailedTitle": "Connection failed",
+  "@errorSessionFailedTitle": {
+    "description": "Title for session failure error"
+  },
+  "errorWifiDirectGroupLost": "Wi-Fi Direct connection was lost. This can happen if devices move too far apart or Wi-Fi is turned off.",
+  "@errorWifiDirectGroupLost": {
+    "description": "User-friendly message for Wi-Fi Direct group lost"
+  },
+  "errorWifiDirectGroupLostTitle": "Connection lost",
+  "@errorWifiDirectGroupLostTitle": {
+    "description": "Title for Wi-Fi Direct group lost error"
+  },
+  "errorPermissionDenied": "Permission denied. Please enable all required permissions in Settings.",
+  "@errorPermissionDenied": {
+    "description": "User-friendly message for permission denied"
+  },
+  "errorPermissionDeniedTitle": "Permission needed",
+  "@errorPermissionDeniedTitle": {
+    "description": "Title for permission denied error"
+  },
+  "errorConnectionRejected": "The other device declined the connection. Please try again.",
+  "@errorConnectionRejected": {
+    "description": "User-friendly message for connection rejected"
+  },
+  "errorConnectionRejectedTitle": "Connection declined",
+  "@errorConnectionRejectedTitle": {
+    "description": "Title for connection rejected error"
+  },
+  "errorConnectionTimeout": "Connection timed out. Make sure both devices are close and try again.",
+  "@errorConnectionTimeout": {
+    "description": "User-friendly message for connection timeout"
+  },
+  "errorConnectionTimeoutTitle": "Connection timed out",
+  "@errorConnectionTimeoutTitle": {
+    "description": "Title for connection timeout error"
+  },
+  "errorWifiOff": "Wi-Fi is turned off. Please turn on Wi-Fi to use Kabelos.",
+  "@errorWifiOff": {
+    "description": "User-friendly message for Wi-Fi off"
+  },
+  "errorWifiOffTitle": "Wi-Fi is off",
+  "@errorWifiOffTitle": {
+    "description": "Title for Wi-Fi off error"
+  },
+  "errorUnknown": "Something went wrong. Please try again.",
+  "@errorUnknown": {
+    "description": "Generic user-friendly error message"
+  },
+  "errorUnknownTitle": "Error",
+  "@errorUnknownTitle": {
+    "description": "Generic error title"
+  },
+  "errorFileTransferFailed": "File transfer failed. Please try sending again.",
+  "@errorFileTransferFailed": {
+    "description": "User-friendly message for file transfer failure"
+  },
+  "errorFileTransferFailedTitle": "Transfer failed",
+  "@errorFileTransferFailedTitle": {
+    "description": "Title for file transfer failure"
+  },
+  "errorAudioNotSupported": "Audio Link isn't supported on this device or connection.",
+  "@errorAudioNotSupported": {
+    "description": "User-friendly message for audio not supported"
+  },
+  "errorAudioNotSupportedTitle": "Audio not available",
+  "@errorAudioNotSupportedTitle": {
+    "description": "Title for audio not supported error"
+  },
+  "retryButton": "Try again",
+  "@retryButton": {
+    "description": "Retry button text"
+  },
+  "openSettingsButton": "Open Settings",
+  "@openSettingsButton": {
+    "description": "Open settings button text"
   }
 }

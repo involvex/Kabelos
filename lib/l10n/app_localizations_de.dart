@@ -926,4 +926,80 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get appSettingsOpened => 'Öffne App-Berechtigungen...';
+
+  @override
+  String get errorPeerProtocolMissing =>
+      'Das andere Gerät nutzt nicht Kabelos. Bitte stellen Sie sicher, dass beide Geräte Kabelos installiert und geöffnet haben.';
+
+  @override
+  String get errorPeerProtocolMissingTitle => 'Inkompatible App';
+
+  @override
+  String get errorSessionFailed =>
+      'Verbindung verloren. Bitte versuchen Sie erneut zu verbinden.';
+
+  @override
+  String get errorSessionFailedTitle => 'Verbindung fehlgeschlagen';
+
+  @override
+  String get errorWifiDirectGroupLost =>
+      'Die Wi-Fi Direct-Verbindung wurde getrennt. Das passiert, wenn Geräte zu weit auseinander sind oder WLAN ausgeschaltet wird.';
+
+  @override
+  String get errorWifiDirectGroupLostTitle => 'Verbindung verloren';
+
+  @override
+  String get errorPermissionDenied =>
+      'Berechtigung verweigert. Bitte aktivieren Sie alle erforderlichen Berechtigungen in den Einstellungen.';
+
+  @override
+  String get errorPermissionDeniedTitle => 'Berechtigung nötig';
+
+  @override
+  String get errorConnectionRejected =>
+      'Das andere Gerät hat die Verbindung abgelehnt. Bitte versuchen Sie es erneut.';
+
+  @override
+  String get errorConnectionRejectedTitle => 'Verbindung abgelehnt';
+
+  @override
+  String get errorConnectionTimeout =>
+      'Verbindung zeitüberschritten. Stellen Sie sicher, dass beide Geräte nah beieinander sind und versuchen Sie es erneut.';
+
+  @override
+  String get errorConnectionTimeoutTitle => 'Verbindung zeitüberschritten';
+
+  @override
+  String get errorWifiOff =>
+      'WLAN ist ausgeschaltet. Bitte schalten Sie WLAN ein, um Kabelos zu nutzen.';
+
+  @override
+  String get errorWifiOffTitle => 'WLAN ist aus';
+
+  @override
+  String get errorUnknown =>
+      'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+
+  @override
+  String get errorUnknownTitle => 'Fehler';
+
+  @override
+  String get errorFileTransferFailed =>
+      'Dateiübertragung fehlgeschlagen. Bitte versuchen Sie erneut zu senden.';
+
+  @override
+  String get errorFileTransferFailedTitle => 'Übertragung fehlgeschlagen';
+
+  @override
+  String get errorAudioNotSupported =>
+      'Audio Link wird auf diesem Gerät oder dieser Verbindung nicht unterstützt.';
+
+  @override
+  String get errorAudioNotSupportedTitle => 'Audio nicht verfügbar';
+
+  @override
+  String get retryButton => 'Erneut versuchen';
+
+  @override
+  String get openSettingsButton => 'Einstellungen öffnen';
 }

@@ -898,4 +898,72 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appSettingsOpened => '正在打开应用权限...';
+
+  @override
+  String get errorPeerProtocolMissing =>
+      '对方设备未运行 Kabelos。请确保两台设备都已安装并打开 Kabelos。';
+
+  @override
+  String get errorPeerProtocolMissingTitle => '应用不兼容';
+
+  @override
+  String get errorSessionFailed => '连接已断开。请尝试重新连接。';
+
+  @override
+  String get errorSessionFailedTitle => '连接失败';
+
+  @override
+  String get errorWifiDirectGroupLost =>
+      'Wi-Fi Direct 连接已丢失。设备距离过远或 Wi-Fi 关闭时可能发生。';
+
+  @override
+  String get errorWifiDirectGroupLostTitle => '连接已丢失';
+
+  @override
+  String get errorPermissionDenied => '权限被拒绝。请在设置中启用所有必需权限。';
+
+  @override
+  String get errorPermissionDeniedTitle => '需要权限';
+
+  @override
+  String get errorConnectionRejected => '对方拒绝了连接。请重试。';
+
+  @override
+  String get errorConnectionRejectedTitle => '连接被拒绝';
+
+  @override
+  String get errorConnectionTimeout => '连接超时。请确保两台设备靠近后重试。';
+
+  @override
+  String get errorConnectionTimeoutTitle => '连接超时';
+
+  @override
+  String get errorWifiOff => 'Wi-Fi 已关闭。请开启 Wi-Fi 以使用 Kabelos。';
+
+  @override
+  String get errorWifiOffTitle => 'Wi-Fi 已关闭';
+
+  @override
+  String get errorUnknown => '发生错误。请重试。';
+
+  @override
+  String get errorUnknownTitle => '错误';
+
+  @override
+  String get errorFileTransferFailed => '文件传输失败。请重试发送。';
+
+  @override
+  String get errorFileTransferFailedTitle => '传输失败';
+
+  @override
+  String get errorAudioNotSupported => '当前设备或连接不支持音频链路。';
+
+  @override
+  String get errorAudioNotSupportedTitle => '音频不可用';
+
+  @override
+  String get retryButton => '重试';
+
+  @override
+  String get openSettingsButton => '打开设置';
 }

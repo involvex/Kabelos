@@ -245,7 +245,7 @@ class WiFiDirectController {
               sessionId: missingEvent.sessionId.isEmpty
                   ? _currentState.sessionId
                   : missingEvent.sessionId,
-              disconnectReason: missingEvent.reason,
+              disconnectReason: 'peer_protocol_missing',
               isConnecting: false,
               pendingPeerAddress: null,
               isServerStarted: false,

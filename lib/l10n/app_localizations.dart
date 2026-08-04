@@ -1767,6 +1767,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Opening app permissions...'**
   String get appSettingsOpened;
+
+  /// User-friendly message for peer protocol missing
+  ///
+  /// In en, this message translates to:
+  /// **'The other device isn\'t running Kabelos. Please make sure both devices have Kabelos installed and open.'**
+  String get errorPeerProtocolMissing;
+
+  /// Title for peer protocol missing error
+  ///
+  /// In en, this message translates to:
+  /// **'Incompatible app'**
+  String get errorPeerProtocolMissingTitle;
+
+  /// User-friendly message for session failure
+  ///
+  /// In en, this message translates to:
+  /// **'Connection lost. Please try connecting again.'**
+  String get errorSessionFailed;
+
+  /// Title for session failure error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed'**
+  String get errorSessionFailedTitle;
+
+  /// User-friendly message for Wi-Fi Direct group lost
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi Direct connection was lost. This can happen if devices move too far apart or Wi-Fi is turned off.'**
+  String get errorWifiDirectGroupLost;
+
+  /// Title for Wi-Fi Direct group lost error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection lost'**
+  String get errorWifiDirectGroupLostTitle;
+
+  /// User-friendly message for permission denied
+  ///
+  /// In en, this message translates to:
+  /// **'Permission denied. Please enable all required permissions in Settings.'**
+  String get errorPermissionDenied;
+
+  /// Title for permission denied error
+  ///
+  /// In en, this message translates to:
+  /// **'Permission needed'**
+  String get errorPermissionDeniedTitle;
+
+  /// User-friendly message for connection rejected
+  ///
+  /// In en, this message translates to:
+  /// **'The other device declined the connection. Please try again.'**
+  String get errorConnectionRejected;
+
+  /// Title for connection rejected error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection declined'**
+  String get errorConnectionRejectedTitle;
+
+  /// User-friendly message for connection timeout
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timed out. Make sure both devices are close and try again.'**
+  String get errorConnectionTimeout;
+
+  /// Title for connection timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timed out'**
+  String get errorConnectionTimeoutTitle;
+
+  /// User-friendly message for Wi-Fi off
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi is turned off. Please turn on Wi-Fi to use Kabelos.'**
+  String get errorWifiOff;
+
+  /// Title for Wi-Fi off error
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi is off'**
+  String get errorWifiOffTitle;
+
+  /// Generic user-friendly error message
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorUnknown;
+
+  /// Generic error title
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorUnknownTitle;
+
+  /// User-friendly message for file transfer failure
+  ///
+  /// In en, this message translates to:
+  /// **'File transfer failed. Please try sending again.'**
+  String get errorFileTransferFailed;
+
+  /// Title for file transfer failure
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed'**
+  String get errorFileTransferFailedTitle;
+
+  /// User-friendly message for audio not supported
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Link isn\'t supported on this device or connection.'**
+  String get errorAudioNotSupported;
+
+  /// Title for audio not supported error
+  ///
+  /// In en, this message translates to:
+  /// **'Audio not available'**
+  String get errorAudioNotSupportedTitle;
+
+  /// Retry button text
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get retryButton;
+
+  /// Open settings button text
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettingsButton;
 }
 
 class _AppLocalizationsDelegate
