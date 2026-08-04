@@ -10,8 +10,14 @@ import '../providers/language_provider.dart';
 class SettingsTab extends StatefulWidget {
   final WiFiDirectController controller;
   final WiFiDirectState state;
+  final VoidCallback onTabsVisibilityChanged;
 
-  const SettingsTab({super.key, required this.controller, required this.state});
+  const SettingsTab({
+    super.key,
+    required this.controller,
+    required this.state,
+    required this.onTabsVisibilityChanged,
+  });
 
   @override
   State<SettingsTab> createState() => _SettingsTabState();
@@ -20,12 +26,14 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final s = widget.state;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -68,7 +76,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.settingsTitle,
+                        l10n.settingsTitle,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -77,7 +85,7 @@ class _SettingsTabState extends State<SettingsTab> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        AppLocalizations.of(context)!.settingsSubtitle,
+                        l10n.settingsSubtitle,
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -90,70 +98,99 @@ class _SettingsTabState extends State<SettingsTab> {
             ),
           ),
           const SizedBox(height: 24),
-
-          // App Settings Section
-          _buildSection(
-            AppLocalizations.of(context)!.appSettings,
-            Icons.app_settings_alt,
-            [
-              _buildLanguageSetting(),
-              Consumer<ThemeProvider>(
-                builder: (context, themeProvider, child) {
-                  return _buildSwitchSetting(
-                    AppLocalizations.of(context)!.darkMode,
-                    AppLocalizations.of(context)!.useDarkTheme,
-                    Icons.dark_mode,
-                    themeProvider.isDarkMode,
-                    (value) {
-                      if (value) {
-                        themeProvider.setThemeMode(ThemeMode.dark);
-                      } else {
-                        themeProvider.setThemeMode(ThemeMode.light);
-                      }
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+          _buildSection(l10n.appSettings, Icons.app_settings_alt, [
+            _buildLanguageSetting(),
+            Consumer<ThemeProvider>(
+              builder: (context, themeProvider, child) {
+                return _buildSwitchSetting(
+                  l10n.darkMode,
+                  l10n.useDarkTheme,
+                  Icons.dark_mode,
+                  themeProvider.isDarkMode,
+                  (value) {
+                    if (value ?? false) {
+                      themeProvider.setThemeMode(ThemeMode.dark);
+                    } else {
+                      themeProvider.setThemeMode(ThemeMode.light);
+                    }
+                  },
+                );
+              },
+            ),
+          ]),
           const SizedBox(height: 20),
-
-          // GitHub Repositories Section
-          _buildSection(
-            AppLocalizations.of(context)!.githubRepositories,
-            Icons.code,
-            [
-              _buildActionTile(
-                AppLocalizations.of(context)!.flutterAppRepository,
-                AppLocalizations.of(context)!.flutterAppDescription,
-                Icons.phone_android,
-                () => _copyToClipboard(
-                  'https://github.com/jingcjie/WDCable_flutter',
-                ),
-              ),
-              _buildActionTile(
-                AppLocalizations.of(context)!.windowsAppRepository,
-                AppLocalizations.of(context)!.windowsAppDescription,
-                Icons.desktop_windows,
-                () =>
-                    _copyToClipboard('https://github.com/jingcjie/WDCableWUI'),
-              ),
-            ],
-          ),
+          _buildSection("Kabelos", Icons.favorite, [
+            _buildSwitchSetting(
+              l10n.settingsKeepServiceRunning,
+              l10n.settingsKeepServiceRunningDescription,
+              Icons.play_arrow,
+              s.isForegroundServiceRunning,
+              (value) async {
+                await widget.controller.setKeepServiceRunning(value ?? false);
+                widget.onTabsVisibilityChanged();
+              },
+            ),
+          ]),
           const SizedBox(height: 20),
-
-          // About Section
-          _buildSection(AppLocalizations.of(context)!.about, Icons.info, [
+          _buildSection(l10n.settingsTabsVisibility, Icons.view_quilt, [
+            _buildTabToggle(
+              l10n.photosTabTitle,
+              Icons.photo_library,
+              s.showPhotosTab,
+              (v) async {
+                await widget.controller.updateTabVisibility(showPhotosTab: v);
+                widget.onTabsVisibilityChanged();
+              },
+            ),
+            _buildTabToggle(
+              l10n.chat,
+              Icons.chat_bubble_outline,
+              s.showChatTab,
+              (v) async {
+                await widget.controller.updateTabVisibility(showChatTab: v);
+                widget.onTabsVisibilityChanged();
+              },
+            ),
+            _buildTabToggle(l10n.audioLink, Icons.graphic_eq, s.showAudioTab, (
+              v,
+            ) async {
+              await widget.controller.updateTabVisibility(showAudioTab: v);
+              widget.onTabsVisibilityChanged();
+            }),
+            _buildTabToggle(l10n.speedTest, Icons.speed, s.showSpeedTestTab, (
+              v,
+            ) async {
+              await widget.controller.updateTabVisibility(showSpeedTestTab: v);
+              widget.onTabsVisibilityChanged();
+            }),
+          ]),
+          const SizedBox(height: 20),
+          _buildSection(l10n.githubRepositories, Icons.code, [
+            _buildActionTile(
+              l10n.flutterAppRepository,
+              l10n.flutterAppDescription,
+              Icons.phone_android,
+              () => _copyToClipboard(
+                'https://github.com/jingcjie/WDCable_flutter',
+              ),
+            ),
+            _buildActionTile(
+              l10n.windowsAppRepository,
+              l10n.windowsAppDescription,
+              Icons.desktop_windows,
+              () => _copyToClipboard('https://github.com/jingcjie/WDCableWUI'),
+            ),
+          ]),
+          const SizedBox(height: 20),
+          _buildSection(l10n.about, Icons.info, [
             _buildInfoTile(
-              AppLocalizations.of(context)!.version,
-              widget.state.appVersion.isEmpty
-                  ? 'Unknown'
-                  : widget.state.appVersion,
+              l10n.version,
+              s.appVersion.isEmpty ? 'Unknown' : s.appVersion,
               Icons.info_outline,
             ),
             _buildActionTile(
-              AppLocalizations.of(context)!.privacyPolicy,
-              AppLocalizations.of(context)!.viewOurPrivacyPolicy,
+              l10n.privacyPolicy,
+              l10n.viewOurPrivacyPolicy,
               Icons.privacy_tip,
               () => _showPrivacyPolicy(),
             ),
@@ -247,48 +284,24 @@ class _SettingsTabState extends State<SettingsTab> {
             ),
             child: Consumer<LanguageProvider>(
               builder: (context, languageProvider, child) {
-                String currentValue = AppLocalizations.of(
-                  context,
-                )!.followSystem;
-                if (languageProvider.locale?.languageCode == 'en') {
-                  currentValue = AppLocalizations.of(context)!.english;
-                } else if (languageProvider.locale?.languageCode == 'zh') {
-                  currentValue = AppLocalizations.of(context)!.chinese;
-                }
-
-                return DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: currentValue,
-                    isExpanded: true,
-                    items: [
-                      DropdownMenuItem(
-                        value: AppLocalizations.of(context)!.followSystem,
-                        child: Text(AppLocalizations.of(context)!.followSystem),
-                      ),
-                      DropdownMenuItem(
-                        value: AppLocalizations.of(context)!.english,
-                        child: Text(AppLocalizations.of(context)!.english),
-                      ),
-                      DropdownMenuItem(
-                        value: AppLocalizations.of(context)!.chinese,
-                        child: Text(AppLocalizations.of(context)!.chinese),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        if (value ==
-                            AppLocalizations.of(context)!.followSystem) {
-                          languageProvider.clearLanguage();
-                        } else if (value ==
-                            AppLocalizations.of(context)!.english) {
-                          languageProvider.setLanguage(const Locale('en'));
-                        } else if (value ==
-                            AppLocalizations.of(context)!.chinese) {
-                          languageProvider.setLanguage(const Locale('zh'));
-                        }
-                      }
-                    },
-                  ),
+                return DropdownButton<String>(
+                  value: languageProvider.currentLanguage,
+                  items: [
+                    DropdownMenuItem(
+                      value: 'system',
+                      child: Text(AppLocalizations.of(context)!.followSystem),
+                    ),
+                    const DropdownMenuItem(value: 'en', child: Text('English')),
+                    const DropdownMenuItem(value: 'de', child: Text('Deutsch')),
+                    const DropdownMenuItem(value: 'zh', child: Text('中文')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      languageProvider.setLanguage(value);
+                    }
+                  },
+                  underline: const SizedBox.shrink(),
+                  isExpanded: true,
                 );
               },
             ),
@@ -300,53 +313,11 @@ class _SettingsTabState extends State<SettingsTab> {
 
   Widget _buildSwitchSetting(
     String title,
-    String subtitle,
+    String description,
     IconData icon,
     bool value,
-    ValueChanged<bool> onChanged, {
-    bool enabled = true,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: enabled ? Colors.grey[600] : Colors.grey[400],
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: enabled ? Colors.black : Colors.grey[500],
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: value,
-            onChanged: enabled ? onChanged : null,
-            activeThumbColor: Theme.of(context).colorScheme.primary,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoTile(String title, String value, IconData icon) {
+    ValueChanged<bool?> onChanged,
+  ) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Row(
@@ -354,12 +325,48 @@ class _SettingsTabState extends State<SettingsTab> {
           Icon(icon, color: Colors.grey[600], size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ],
             ),
           ),
-          Text(value, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+          Switch(value: value, onChanged: onChanged),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabToggle(
+    String title,
+    IconData icon,
+    bool value,
+    ValueChanged<bool?> onChanged,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.grey[600], size: 20),
+          const SizedBox(width: 12),
+          Expanded(child: Text(title, style: const TextStyle(fontSize: 16))),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
+          ),
         ],
       ),
     );
@@ -367,50 +374,44 @@ class _SettingsTabState extends State<SettingsTab> {
 
   Widget _buildActionTile(
     String title,
-    String subtitle,
+    String description,
     IconData icon,
-    VoidCallback onTap, {
-    bool isDestructive = false,
-  }) {
+    VoidCallback onTap,
+  ) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: isDestructive ? Colors.red[600] : Colors.grey[600],
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: isDestructive ? Colors.red[600] : Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),
-            ],
-          ),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.grey[600]),
+        title: Text(title),
+        subtitle: Text(
+          description,
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
         ),
+        onTap: onTap,
+      ),
+    );
+  }
+
+  Widget _buildInfoTile(String title, String value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.grey[600]),
+        title: Text(title),
+        subtitle: Text(
+          value,
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+        ),
+        onTap: () {},
+      ),
+    );
+  }
+
+  void _copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.urlCopiedToClipboard(text)),
       ),
     );
   }
@@ -423,21 +424,10 @@ class _SettingsTabState extends State<SettingsTab> {
         content: Text(AppLocalizations.of(context)!.privacyPolicyContent),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: Navigator.of(context).pop,
             child: Text(AppLocalizations.of(context)!.ok),
           ),
         ],
-      ),
-    );
-  }
-
-  void _copyToClipboard(String url) {
-    Clipboard.setData(ClipboardData(text: url));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context)!.urlCopiedToClipboard(url)),
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }

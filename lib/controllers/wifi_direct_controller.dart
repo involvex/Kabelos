@@ -124,7 +124,7 @@ class WiFiDirectController {
               'Wi-Fi Direct connected as ${connectionEvent.connectionInfo.isGroupOwner ? "Group Owner" : "Client"}';
           _addLog(connectionStatus);
           AppLogger.info('[ANDROID CONNECTION] $connectionStatus');
-          _addLog('Waiting for WDCable session handshake');
+          _addLog('Waiting for Kabelos session handshake');
         } else {
           if (_currentState.isConnecting) {
             _addLog('Wi-Fi Direct connection is still pending');
@@ -162,8 +162,8 @@ class WiFiDirectController {
             wasRegistered != nativeEvent.serviceRegistered) {
           _addLog(
             nativeEvent.serviceRegistered
-                ? 'WDCable service registered'
-                : 'WDCable service not registered',
+                ? 'Kabelos service registered'
+                : 'Kabelos service not registered',
           );
         }
         break;
@@ -214,7 +214,7 @@ class WiFiDirectController {
           ),
         );
         _addLog(
-          'WDCable session ready ($roleLabel, protocol v${sessionEvent.protocolVersion})',
+          'Kabelos session ready ($roleLabel, protocol v${sessionEvent.protocolVersion})',
         );
         loadAudioSupport();
         break;
@@ -253,7 +253,7 @@ class WiFiDirectController {
           ),
         );
         _addLog(
-          'Peer is connected by Wi-Fi Direct but is not running the upgraded WDCable protocol',
+          'Peer is connected by Wi-Fi Direct but is not running the upgraded Kabelos protocol',
         );
         break;
 
@@ -723,6 +723,157 @@ class WiFiDirectController {
 
   // Public methods for UI to call
 
+  Future<void> refreshDiagnostics() async {
+    try {
+      final settings = await _service.getDeviceSettings();
+      final diagnostics = await _service.getDiagnostics();
+
+      _updateState(
+        _currentState.copyWith(
+          appVersion:
+              settings['appVersion']?.toString() ?? _currentState.appVersion,
+          deviceName:
+              settings['deviceName']?.toString() ?? _currentState.deviceName,
+          deviceModel:
+              settings['deviceModel']?.toString() ?? _currentState.deviceModel,
+          androidVersion:
+              settings['androidVersion']?.toString() ??
+              _currentState.androidVersion,
+          isForegroundServiceRunning:
+              diagnostics['foregroundServiceRunning'] == true,
+          isWifiLockHeld: diagnostics['wifiLockHeld'] == true,
+          isWakeLockHeld: diagnostics['wakeLockHeld'] == true,
+        ),
+      );
+    } catch (e) {
+      _addLog('Failed to refresh diagnostics: $e');
+    }
+  }
+
+  // Kabelos: Foreground service
+  Future<void> startForegroundService() async {
+    try {
+      await _service.startForegroundService();
+      _addLog('Foreground service started');
+    } catch (e) {
+      _addLog('Failed to start foreground service: $e');
+    }
+  }
+
+  Future<void> stopForegroundService() async {
+    try {
+      await _service.stopForegroundService();
+      _addLog('Foreground service stopped');
+    } catch (e) {
+      _addLog('Failed to stop foreground service: $e');
+    }
+  }
+
+  Future<bool> checkForegroundServiceRunning() async {
+    try {
+      final running = await _service.isForegroundServiceRunning();
+      _updateState(_currentState.copyWith(isForegroundServiceRunning: running));
+      return running;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Kabelos: Setup check
+  Future<Map<String, dynamic>> runSetupCheck() async {
+    try {
+      final result = await _service.runSetupCheck();
+      // Update state with diagnostics from setup check
+      _updateState(
+        _currentState.copyWith(
+          isForegroundServiceRunning: result['foregroundService'] == true,
+          isWifiLockHeld: result['wifiLock'] == true,
+          isWakeLockHeld: result['wakeLock'] == true,
+        ),
+      );
+      return result;
+    } catch (e) {
+      _addLog('Setup check failed: $e');
+      return {};
+    }
+  }
+
+  // Kabelos: QR payload
+  Future<Map<String, dynamic>> getQrPayload() async {
+    try {
+      return await _service.getQrPayload();
+    } catch (e) {
+      return {};
+    }
+  }
+
+  // Kabelos: Settings deep links
+  Future<void> openWifiSettings() => _service.openWifiSettings();
+  Future<void> openNearbyDevicesSettings() =>
+      _service.openNearbyDevicesSettings();
+  Future<void> openAppSettings() => _service.openAppSettings();
+
+  // Kabelos: Tab visibility persistence
+  Future<void> saveTabVisibility() async {
+    await DataManager.instance.setBool(
+      'showPhotosTab',
+      _currentState.showPhotosTab,
+    );
+    await DataManager.instance.setBool(
+      'showChatTab',
+      _currentState.showChatTab,
+    );
+    await DataManager.instance.setBool(
+      'showAudioTab',
+      _currentState.showAudioTab,
+    );
+    await DataManager.instance.setBool(
+      'showSpeedTestTab',
+      _currentState.showSpeedTestTab,
+    );
+  }
+
+  Future<void> updateTabVisibility({
+    bool? showPhotosTab,
+    bool? showChatTab,
+    bool? showAudioTab,
+    bool? showSpeedTestTab,
+  }) async {
+    _updateState(
+      _currentState.copyWith(
+        showPhotosTab: showPhotosTab ?? _currentState.showPhotosTab,
+        showChatTab: showChatTab ?? _currentState.showChatTab,
+        showAudioTab: showAudioTab ?? _currentState.showAudioTab,
+        showSpeedTestTab: showSpeedTestTab ?? _currentState.showSpeedTestTab,
+      ),
+    );
+    await saveTabVisibility();
+  }
+
+  // Kabelos: Foreground service toggle
+  Future<void> setKeepServiceRunning(bool enabled) async {
+    await DataManager.instance.setBool('keepServiceRunning', enabled);
+    if (enabled) {
+      await startForegroundService();
+    } else {
+      await stopForegroundService();
+    }
+  }
+
+  Future<Map<String, dynamic>> loadTabVisibility() async {
+    final prefs = DataManager.instance;
+    return {
+      'showPhotosTab': await prefs.getBool('showPhotosTab') ?? true,
+      'showChatTab': await prefs.getBool('showChatTab') ?? false,
+      'showAudioTab': await prefs.getBool('showAudioTab') ?? false,
+      'showSpeedTestTab': await prefs.getBool('showSpeedTestTab') ?? false,
+    };
+  }
+
+  Future<bool> loadKeepServiceRunning() async {
+    return await DataManager.instance.getBool('keepServiceRunning') ?? false;
+  }
+
   Future<void> discoverPeers() async {
     try {
       _updateState(_currentState.copyWith(lastNativeError: null));
@@ -795,7 +946,7 @@ class WiFiDirectController {
     }
 
     if (!_currentState.isSessionReady) {
-      _addLog('Send cancelled: WDCable session is not ready');
+      _addLog('Send cancelled: Kabelos session is not ready');
       return;
     }
 
@@ -920,7 +1071,7 @@ class WiFiDirectController {
     }
 
     if (!_currentState.isSessionReady) {
-      _addLog('Speed test cancelled: WDCable session is not ready');
+      _addLog('Speed test cancelled: Kabelos session is not ready');
       return;
     }
 
@@ -1180,7 +1331,7 @@ class WiFiDirectController {
     String? qualityMode,
   }) async {
     if (!_currentState.isSessionReady) {
-      _addLog('Audio cancelled: WDCable session is not ready');
+      _addLog('Audio cancelled: Kabelos session is not ready');
       return;
     }
     if (!_currentState.peerSupportsAudio) {
@@ -1279,7 +1430,7 @@ class WiFiDirectController {
   // File transfer methods
   Future<bool> sendFile(String filePath, {String? fileName}) async {
     if (!_currentState.isSessionReady) {
-      _addLog('File send cancelled: WDCable session is not ready');
+      _addLog('File send cancelled: Kabelos session is not ready');
       return false;
     }
 

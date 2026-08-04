@@ -4,9 +4,9 @@ import '../services/data_manager.dart';
 class ThemeProvider extends ChangeNotifier {
   static const String _themeKey = 'theme_mode';
   ThemeMode _themeMode = ThemeMode.system;
-  
+
   ThemeMode get themeMode => _themeMode;
-  
+
   bool get isDarkMode {
     switch (_themeMode) {
       case ThemeMode.dark:
@@ -14,29 +14,31 @@ class ThemeProvider extends ChangeNotifier {
       case ThemeMode.light:
         return false;
       case ThemeMode.system:
-        return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
     }
   }
-  
+
   ThemeProvider() {
     _loadTheme();
   }
-  
+
   void _loadTheme() async {
     final dataManager = DataManager.instance;
-    final themeIndex = await dataManager.getInt(_themeKey, defaultValue: 0) ?? 0;
+    final themeIndex =
+        await dataManager.getInt(_themeKey, defaultValue: 0) ?? 0;
     _themeMode = ThemeMode.values[themeIndex];
     notifyListeners();
   }
-  
+
   void setThemeMode(ThemeMode themeMode) async {
     _themeMode = themeMode;
     notifyListeners();
-    
+
     final dataManager = DataManager.instance;
     await dataManager.setInt(_themeKey, themeMode.index);
   }
-  
+
   void toggleTheme() {
     if (_themeMode == ThemeMode.light) {
       setThemeMode(ThemeMode.dark);
@@ -76,7 +78,7 @@ class AppThemes {
       ),
     );
   }
-  
+
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,

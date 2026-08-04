@@ -71,6 +71,7 @@ class WiFiDirectConnectionInfo {
   final String wifiRole;
   final String transportRole;
   final String? groupOwnerAddress;
+  final String? peerName;
 
   WiFiDirectConnectionInfo({
     required this.isConnected,
@@ -78,6 +79,7 @@ class WiFiDirectConnectionInfo {
     String? wifiRole,
     String? transportRole,
     this.groupOwnerAddress,
+    this.peerName,
   }) : wifiRole = wifiRole ?? (isConnected ? _wifiRoleFor(isGroupOwner) : ''),
        transportRole =
            transportRole ??
@@ -92,6 +94,7 @@ class WiFiDirectConnectionInfo {
       wifiRole: map['wifiRole']?.toString(),
       transportRole: map['transportRole']?.toString(),
       groupOwnerAddress: map['groupOwnerAddress'],
+      peerName: map['peerName']?.toString() ?? map['deviceName']?.toString(),
     );
   }
 
@@ -102,6 +105,7 @@ class WiFiDirectConnectionInfo {
       'wifiRole': wifiRole,
       'transportRole': transportRole,
       'groupOwnerAddress': groupOwnerAddress,
+      'peerName': peerName,
     };
   }
 
@@ -111,6 +115,7 @@ class WiFiDirectConnectionInfo {
     String? wifiRole,
     String? transportRole,
     String? groupOwnerAddress,
+    String? peerName,
   }) {
     final nextConnected = isConnected ?? this.isConnected;
     final nextGroupOwner = isGroupOwner ?? this.isGroupOwner;
@@ -131,6 +136,7 @@ class WiFiDirectConnectionInfo {
                     : this.transportRole)
               : ''),
       groupOwnerAddress: groupOwnerAddress ?? this.groupOwnerAddress,
+      peerName: peerName ?? this.peerName,
     );
   }
 }
@@ -677,6 +683,9 @@ class WiFiDirectState {
   final bool isServiceRegistered;
   final int operationId;
   final String appVersion;
+  final String deviceName;
+  final String deviceModel;
+  final String androidVersion;
   final String? lastNativeError;
   final bool isConnecting;
   final String? pendingPeerAddress;
@@ -710,6 +719,16 @@ class WiFiDirectState {
   final AudioLinkStats audioStats;
   final String? audioLastError;
 
+  // Kabelos: tab visibility preferences
+  final bool showPhotosTab;
+  final bool showChatTab;
+  final bool showAudioTab;
+  final bool showSpeedTestTab;
+  // Kabelos: foreground service status (populated from native diagnostics)
+  final bool isForegroundServiceRunning;
+  final bool isWifiLockHeld;
+  final bool isWakeLockHeld;
+
   WiFiDirectState({
     this.isWifiP2pEnabled = false,
     this.nativeWifiDirectState = 'Unavailable',
@@ -720,6 +739,9 @@ class WiFiDirectState {
     this.isServiceRegistered = false,
     this.operationId = 0,
     this.appVersion = '',
+    this.deviceName = '',
+    this.deviceModel = '',
+    this.androidVersion = '',
     this.lastNativeError,
     this.isConnecting = false,
     this.pendingPeerAddress,
@@ -752,6 +774,13 @@ class WiFiDirectState {
     this.audioStreamId,
     this.audioStats = const AudioLinkStats(),
     this.audioLastError,
+    this.showPhotosTab = true,
+    this.showChatTab = false,
+    this.showAudioTab = false,
+    this.showSpeedTestTab = false,
+    this.isForegroundServiceRunning = false,
+    this.isWifiLockHeld = false,
+    this.isWakeLockHeld = false,
   });
 
   WiFiDirectState copyWith({
@@ -764,6 +793,9 @@ class WiFiDirectState {
     bool? isServiceRegistered,
     int? operationId,
     String? appVersion,
+    String? deviceName,
+    String? deviceModel,
+    String? androidVersion,
     Object? lastNativeError = _unset,
     bool? isConnecting,
     Object? pendingPeerAddress = _unset,
@@ -796,6 +828,13 @@ class WiFiDirectState {
     Object? audioStreamId = _unset,
     AudioLinkStats? audioStats,
     Object? audioLastError = _unset,
+    bool? showPhotosTab,
+    bool? showChatTab,
+    bool? showAudioTab,
+    bool? showSpeedTestTab,
+    bool? isForegroundServiceRunning,
+    bool? isWifiLockHeld,
+    bool? isWakeLockHeld,
   }) {
     return WiFiDirectState(
       isWifiP2pEnabled: isWifiP2pEnabled ?? this.isWifiP2pEnabled,
@@ -808,6 +847,9 @@ class WiFiDirectState {
       isServiceRegistered: isServiceRegistered ?? this.isServiceRegistered,
       operationId: operationId ?? this.operationId,
       appVersion: appVersion ?? this.appVersion,
+      deviceName: deviceName ?? this.deviceName,
+      deviceModel: deviceModel ?? this.deviceModel,
+      androidVersion: androidVersion ?? this.androidVersion,
       lastNativeError: identical(lastNativeError, _unset)
           ? this.lastNativeError
           : lastNativeError as String?,
@@ -860,6 +902,14 @@ class WiFiDirectState {
       audioLastError: identical(audioLastError, _unset)
           ? this.audioLastError
           : audioLastError as String?,
+      showPhotosTab: showPhotosTab ?? this.showPhotosTab,
+      showChatTab: showChatTab ?? this.showChatTab,
+      showAudioTab: showAudioTab ?? this.showAudioTab,
+      showSpeedTestTab: showSpeedTestTab ?? this.showSpeedTestTab,
+      isForegroundServiceRunning:
+          isForegroundServiceRunning ?? this.isForegroundServiceRunning,
+      isWifiLockHeld: isWifiLockHeld ?? this.isWifiLockHeld,
+      isWakeLockHeld: isWakeLockHeld ?? this.isWakeLockHeld,
     );
   }
 

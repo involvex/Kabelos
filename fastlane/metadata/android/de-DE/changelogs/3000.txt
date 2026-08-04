@@ -1,0 +1,10 @@
+Kabelos 3.0.0 - Rebrand from "WiFi Direct Cable" to "Kabelos"
+- Neu: Einfache Einrichtung mit automatischen Prüfungen
+- Neu: QR-Code-Pairing zur Geräteidentifizierung  
+- Neu: Fotos-Tab mit Bildgalerie-Auswahl
+- Neu: Einrichtungsprüfung mit "Beheben"-Buttons
+- Neu: Detailliertere Geräte-Info-Anzeige
+- Neu: Deutsche Sprache vollständig unterstützt
+- Neu: Hintergrunddienst-Status in Einstellungen
+- Verbessert: Vereinfachte Benutzeroberfläche für Senioren
+- Chat, Audio Link und Speed Test standardmäßig ausgeblendet (in Einstellungen aktivierbar)

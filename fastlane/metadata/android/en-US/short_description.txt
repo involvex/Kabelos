@@ -1,1 +1,1 @@
-Offline file, chat, speed test, and audio transfer over Wi-Fi Direct.
+Kabelos lets you send files, photos, and messages to nearby devices over Wi-Fi Direct — no internet or router needed. Just two Android devices and a few taps.

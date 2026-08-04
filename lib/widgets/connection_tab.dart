@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/wifi_direct_models.dart';
 import '../controllers/wifi_direct_controller.dart';
-import 'package:wifi_direct_cable/l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
+import '../screens/setup_check_screen.dart';
+import '../screens/device_info_screen.dart';
+import '../screens/qr_pairing_screen.dart';
 
 class ConnectionTab extends StatelessWidget {
   final WiFiDirectController controller;
@@ -35,12 +38,13 @@ class ConnectionTab extends StatelessWidget {
   }
 
   Widget _buildWifiP2pStatus(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final statusText = !state.isWifiP2pEnabled
-        ? AppLocalizations.of(context)!.disabledEnableWifi
+        ? l10n.connectionStatusWifiOff
         : state.isDiscovering
-        ? 'Scan running'
-        : state.isAvailableNearby
-        ? 'Available nearby'
+        ? l10n.scanning
+        : state.isForegroundServiceRunning || state.isServiceRegistered
+        ? l10n.readyForConnections
         : state.nativeWifiDirectState;
 
     return Container(
@@ -70,7 +74,7 @@ class ConnectionTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.of(context)!.wifiP2pDriver,
+                  'Wi-Fi Direct',
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -186,9 +190,20 @@ class ConnectionTab extends StatelessWidget {
             children: [
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: controller.logDeviceSettings,
-                  icon: const Icon(Icons.info),
-                  label: Text(AppLocalizations.of(context)!.deviceInfo),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => SetupCheckScreen(
+                          controller: controller,
+                          state: state,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.checklist),
+                  label: Text(
+                    AppLocalizations.of(context)!.connectionSetupCheck,
+                  ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -197,13 +212,44 @@ class ConnectionTab extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: controller.resetWifiDirectSettings,
-                  icon: const Icon(Icons.refresh),
-                  label: Text(AppLocalizations.of(context)!.resetWifiDirect),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => QrPairingScreen(
+                          controller: controller,
+                          state: state,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.qr_code_scanner),
+                  label: Text(
+                    AppLocalizations.of(context)!.connectionQrPairing,
+                  ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => DeviceInfoScreen(
+                          controller: controller,
+                          state: state,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.info),
+                  label: Text(
+                    AppLocalizations.of(context)!.connectionDeviceInfo,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
               ),
@@ -323,7 +369,7 @@ class ConnectionTab extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(top: 2),
                           child: Text(
-                            'WDCable peer',
+                            'Kabelos peer',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w500,

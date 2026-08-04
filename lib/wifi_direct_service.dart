@@ -549,7 +549,7 @@ class WiFiDirectService {
                   failureData['reason']?.toString() ?? 'peer_protocol_missing',
               message:
                   failureData['message']?.toString() ??
-                  'Peer is not running the upgraded WDCable protocol',
+                  'Peer is not running the upgraded Kabelos protocol',
               sessionId: failureData['sessionId']?.toString() ?? '',
             ),
           );
@@ -1077,6 +1077,98 @@ class WiFiDirectService {
       return result;
     } catch (e) {
       throw Exception('Failed to stop audio: $e');
+    }
+  }
+
+  // Kabelos: Foreground service management
+  Future<void> startForegroundService() async {
+    try {
+      await _channel.invokeMethod('startForegroundService');
+    } catch (e) {
+      throw Exception('Failed to start foreground service: $e');
+    }
+  }
+
+  Future<void> stopForegroundService() async {
+    try {
+      await _channel.invokeMethod('stopForegroundService');
+    } catch (e) {
+      throw Exception('Failed to stop foreground service: $e');
+    }
+  }
+
+  Future<bool> isForegroundServiceRunning() async {
+    try {
+      final bool result = await _channel.invokeMethod(
+        'isForegroundServiceRunning',
+      );
+      return result;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Kabelos: Diagnostics
+  Future<Map<String, dynamic>> getDiagnostics() async {
+    try {
+      final result = await _channel.invokeMethod('getDiagnostics');
+      if (result is Map) {
+        return Map<String, dynamic>.from(result);
+      }
+      return {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  // Kabelos: Setup check
+  Future<Map<String, dynamic>> runSetupCheck() async {
+    try {
+      final result = await _channel.invokeMethod('runSetupCheck');
+      if (result is Map) {
+        return Map<String, dynamic>.from(result);
+      }
+      return {};
+    } catch (e) {
+      throw Exception('Failed to run setup check: $e');
+    }
+  }
+
+  // Kabelos: QR pairing
+  Future<Map<String, dynamic>> getQrPayload() async {
+    try {
+      final result = await _channel.invokeMethod('getQrPayload');
+      if (result is Map) {
+        return Map<String, dynamic>.from(result);
+      }
+      return {};
+    } catch (e) {
+      throw Exception('Failed to get QR payload: $e');
+    }
+  }
+
+  // Kabelos: Settings deep links
+  Future<void> openWifiSettings() async {
+    try {
+      await _channel.invokeMethod('openWifiSettings');
+    } catch (e) {
+      throw Exception('Failed to open Wi-Fi settings: $e');
+    }
+  }
+
+  Future<void> openNearbyDevicesSettings() async {
+    try {
+      await _channel.invokeMethod('openNearbyDevicesSettings');
+    } catch (e) {
+      throw Exception('Failed to open nearby devices settings: $e');
+    }
+  }
+
+  Future<void> openAppSettings() async {
+    try {
+      await _channel.invokeMethod('openAppSettings');
+    } catch (e) {
+      throw Exception('Failed to open app settings: $e');
     }
   }
 

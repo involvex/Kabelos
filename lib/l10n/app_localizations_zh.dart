@@ -401,7 +401,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get flutterAppRepository => 'Flutter 应用仓库';
 
   @override
-  String get flutterAppDescription => 'WDCable Flutter - 移动端 WiFi 直连文件传输应用';
+  String get flutterAppDescription => 'Kabelos - 离线附近文件与照片分享';
 
   @override
   String get windowsAppRepository => 'Windows 应用仓库';
@@ -563,4 +563,339 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get kbpsUnit => 'kbps';
+
+  @override
+  String get appTitleNew => 'Kabelos';
+
+  @override
+  String get appTagline => '在近距离设备间分享文件 — 无需互联网';
+
+  @override
+  String get onboardingTitle => '欢迎使用 Kabelos';
+
+  @override
+  String get onboardingSubtitle => '通过 Wi-Fi Direct 与附近设备分享照片、文件等';
+
+  @override
+  String get onboardingStep1Title => '打开 Wi-Fi';
+
+  @override
+  String get onboardingStep1Description =>
+      'Kabelos 使用 Wi-Fi Direct 直接连接附近设备。无需互联网、路由器或热点。';
+
+  @override
+  String get onboardingStep2Title => '允许访问附近设备';
+
+  @override
+  String get onboardingStep2Description =>
+      'Android 13+ 需要权限来查找和连接附近设备。这不会使用您的位置信息。';
+
+  @override
+  String get onboardingStep3Title => '让 Kabelos 在后台运行';
+
+  @override
+  String get onboardingStep3Description =>
+      '启用后台服务，即使应用关闭，Kabelos 也能随时接收文件。稍后可在设置中更改。';
+
+  @override
+  String get onboardingStep4Title => '三星 One UI 提示';
+
+  @override
+  String get onboardingStep4Description =>
+      '三星平板和手机：设置 → 连接 → 更多连接设置 → 附近设备扫描 → 开启。同时检查：设置 → 应用 → Kabelos → 权限 → 附近设备 = 允许。';
+
+  @override
+  String get onboardingContinue => '继续';
+
+  @override
+  String get onboardingFinish => '完成设置';
+
+  @override
+  String get onboardingSkip => '跳过';
+
+  @override
+  String get onboardingChecking => '检查设置...';
+
+  @override
+  String get onboardingCheckPassed => '设置看起来不错！';
+
+  @override
+  String get onboardingCheckFailed => '某些项目需要注意';
+
+  @override
+  String get setupCheckTitle => '设置检查';
+
+  @override
+  String get setupCheckSubtitle => '验证 Kabelos 是否准备好发送和接收';
+
+  @override
+  String get setupCheckRunning => '检查中...';
+
+  @override
+  String get setupCheckItemWifiOn => 'Wi-Fi 已开启';
+
+  @override
+  String get setupCheckItemWifiDirectReady => 'Wi-Fi Direct 就绪';
+
+  @override
+  String get setupCheckItemNearbyPermission => '附近设备权限已授予';
+
+  @override
+  String get setupCheckItemForegroundService => '后台服务正在运行';
+
+  @override
+  String get setupCheckItemWifiLock => 'Wi-Fi 锁已持有';
+
+  @override
+  String get setupCheckItemWakeLock => '唤醒锁已持有';
+
+  @override
+  String get setupCheckItemSamsungNearbyScanning => '三星附近设备扫描已开启';
+
+  @override
+  String get setupCheckPass => '通过';
+
+  @override
+  String get setupCheckFail => '需注意';
+
+  @override
+  String get setupCheckFixIt => '修复';
+
+  @override
+  String get setupCheckAllGood => '所有检查通过 — Kabelos 已就绪！';
+
+  @override
+  String get setupCheckSomeFailed => '部分检查失败。点击 \"修复\" 解决。';
+
+  @override
+  String get qrPairingTitle => 'QR 配对助手';
+
+  @override
+  String get qrPairingSubtitle => '显示或扫描代码以识别另一设备';
+
+  @override
+  String get qrPairingShowCode => '显示我的代码';
+
+  @override
+  String get qrPairingScanCode => '扫描另一设备';
+
+  @override
+  String get qrPairingYourCode => '您的 Kabelos 代码';
+
+  @override
+  String get qrPairingDeviceName => '设备名称';
+
+  @override
+  String get qrPairingPairingCode => '配对代码';
+
+  @override
+  String get qrPairingNote =>
+      '此代码帮助您识别正确设备。仍需在设备列表点击 \"连接\"。Wi-Fi Direct 不支持仅凭代码自动配对。';
+
+  @override
+  String get qrPairingScanning => '将相机对准另一设备的 QR 码';
+
+  @override
+  String qrPairingScanResult(String name, String code) {
+    return '发现：$name ($code)';
+  }
+
+  @override
+  String get qrPairingPermissionCamera => '需要相机权限扫描 QR 码';
+
+  @override
+  String get photoPickerTitle => '发送照片';
+
+  @override
+  String get photoPickerSubtitle => '从相册选择照片发送';
+
+  @override
+  String get photoPickerSelectPhotos => '选择照片';
+
+  @override
+  String get photoPickerNoPhotosSelected => '未选择照片';
+
+  @override
+  String photoPickerSelectedCount(int count) {
+    return '已选择 $count 张照片';
+  }
+
+  @override
+  String photoPickerSend(int count) {
+    return '发送 $count 张照片';
+  }
+
+  @override
+  String get photoPickerPermissionPhotos => '需要照片权限访问您的相册';
+
+  @override
+  String get deviceInfoTitle => '设备信息';
+
+  @override
+  String get deviceInfoSubtitle => '关于此设备和 Wi-Fi Direct 连接的详情';
+
+  @override
+  String get deviceInfoThisDevice => '此设备';
+
+  @override
+  String get deviceInfoConnectedPeer => '已连接设备';
+
+  @override
+  String get deviceInfoDeviceName => '设备名称';
+
+  @override
+  String get deviceInfoModel => '型号';
+
+  @override
+  String get deviceInfoAndroidVersion => 'Android 版本';
+
+  @override
+  String get deviceInfoAppVersion => '应用版本';
+
+  @override
+  String get deviceInfoWifiDirectStatus => 'Wi-Fi Direct 状态';
+
+  @override
+  String get deviceInfoIsGroupOwner => '群组所有者';
+
+  @override
+  String get deviceInfoGroupOwner => '群组所有者';
+
+  @override
+  String get deviceInfoClient => '客户端';
+
+  @override
+  String get deviceInfoNetworkAddress => '网络地址';
+
+  @override
+  String get deviceInfoPassphrase => '密码';
+
+  @override
+  String get deviceInfoFrequency => '频率';
+
+  @override
+  String get deviceInfoWifiState => 'Wi-Fi 状态';
+
+  @override
+  String get deviceInfoForegroundService => '后台服务';
+
+  @override
+  String get deviceInfoWifiLock => 'Wi-Fi 锁';
+
+  @override
+  String get deviceInfoWakeLock => '唤醒锁';
+
+  @override
+  String get deviceInfoRunning => '运行中';
+
+  @override
+  String get deviceInfoStopped => '已停止';
+
+  @override
+  String get deviceInfoHeld => '已持有';
+
+  @override
+  String get deviceInfoNotHeld => '未持有';
+
+  @override
+  String get deviceInfoPeerCapabilities => '对端能力';
+
+  @override
+  String get deviceInfoSessionCapabilities => '会话能力';
+
+  @override
+  String get deviceInfoCopy => '复制详情';
+
+  @override
+  String get deviceInfoCopied => '已复制到剪贴板';
+
+  @override
+  String get servicePromptTitle => '让 Kabelos 在后台运行？';
+
+  @override
+  String get servicePromptDescription => '启用后台服务，即使应用关闭也能接收文件。会显示持久通知指示状态。';
+
+  @override
+  String get servicePromptEnable => '启用后台服务';
+
+  @override
+  String get servicePromptDisable => '禁用后台服务';
+
+  @override
+  String get servicePromptRunning => '后台服务运行中';
+
+  @override
+  String get servicePromptStopped => '后台服务已停止';
+
+  @override
+  String get servicePromptLearnMore => '了解更多';
+
+  @override
+  String get servicePromptDismiss => '稍后';
+
+  @override
+  String get settingsShowChat => '显示聊天标签页';
+
+  @override
+  String get settingsShowAudioLink => '显示音频链路标签页';
+
+  @override
+  String get settingsShowSpeedTest => '显示速度测试标签页';
+
+  @override
+  String get settingsKeepServiceRunning => '让 Kabelos 在后台运行';
+
+  @override
+  String get settingsKeepServiceRunningDescription =>
+      '启用后，Kabelos 作为后台服务运行，应用关闭时也能接收文件。会显示持久通知。';
+
+  @override
+  String get settingsTabsVisibility => '可见标签页';
+
+  @override
+  String get connectionTabTitle => '设备';
+
+  @override
+  String get connectionTabSubtitle => '查找并连接附近设备';
+
+  @override
+  String connectionStatusConnected(String name) {
+    return '已连接至 $name';
+  }
+
+  @override
+  String get connectionStatusReady => '就绪 — Wi-Fi Direct 已开启';
+
+  @override
+  String get connectionStatusWifiOff => 'Wi-Fi 关闭 — 请开启 Wi-Fi';
+
+  @override
+  String get connectionStatusDisabled => '已禁用 — 请检查设置';
+
+  @override
+  String get connectionSetupCheck => '设置检查';
+
+  @override
+  String get connectionQrPairing => 'QR 配对';
+
+  @override
+  String get connectionDeviceInfo => '设备信息';
+
+  @override
+  String get filesTabTitle => '文件';
+
+  @override
+  String get photosTabTitle => '照片';
+
+  @override
+  String get wifiSettingsOpened => '正在打开 Wi-Fi 设置...';
+
+  @override
+  String get nearbyDevicesSettingsOpened => '正在打开附近设备设置...';
+
+  @override
+  String get samsungNearbyScanningSettingsOpened => '正在打开三星附近扫描设置...';
+
+  @override
+  String get appSettingsOpened => '正在打开应用权限...';
 }

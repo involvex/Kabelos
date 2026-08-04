@@ -27,7 +27,7 @@ val splitPerAbi = providers.gradleProperty("split-per-abi")
 val supportedAbis = listOf("arm64-v8a", "x86_64")
 
 android {
-    namespace = "com.jingcjie.wifi_direct_cable"
+    namespace = "com.involvex.kabelos"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.jingcjie.wifi_direct_cable"
+        applicationId = "com.involvex.kabelos"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 33

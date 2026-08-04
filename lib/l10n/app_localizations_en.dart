@@ -407,7 +407,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flutterAppDescription =>
-      'WDCable Flutter - Mobile WiFi Direct file transfer app';
+      'Kabelos - Offline file & photo sharing nearby';
 
   @override
   String get windowsAppRepository => 'Windows App Repository';
@@ -571,4 +571,353 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kbpsUnit => 'kbps';
+
+  @override
+  String get appTitleNew => 'Kabelos';
+
+  @override
+  String get appTagline =>
+      'Share files between nearby devices — no internet needed';
+
+  @override
+  String get onboardingTitle => 'Welcome to Kabelos';
+
+  @override
+  String get onboardingSubtitle =>
+      'Share photos, files, and more with nearby devices over Wi-Fi Direct';
+
+  @override
+  String get onboardingStep1Title => 'Turn on Wi-Fi';
+
+  @override
+  String get onboardingStep1Description =>
+      'Kabelos uses Wi-Fi Direct to connect directly to nearby devices. No internet, router, or hotspot required.';
+
+  @override
+  String get onboardingStep2Title => 'Allow nearby device access';
+
+  @override
+  String get onboardingStep2Description =>
+      'Android 13+ requires permission to find and connect to nearby devices. This does not use your location.';
+
+  @override
+  String get onboardingStep3Title => 'Keep Kabelos running';
+
+  @override
+  String get onboardingStep3Description =>
+      'Enable the background service so Kabelos stays ready to receive files even when the app is closed. You can change this later in Settings.';
+
+  @override
+  String get onboardingStep4Title => 'Samsung One UI note';
+
+  @override
+  String get onboardingStep4Description =>
+      'On Samsung tablets and phones: open Settings → Connections → More connection settings → Nearby device scanning and turn it ON. Also check Settings → Apps → Kabelos → Permissions → Nearby devices = Allow.';
+
+  @override
+  String get onboardingContinue => 'Continue';
+
+  @override
+  String get onboardingFinish => 'Finish setup';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingChecking => 'Checking setup...';
+
+  @override
+  String get onboardingCheckPassed => 'Setup looks good!';
+
+  @override
+  String get onboardingCheckFailed => 'Some items need attention';
+
+  @override
+  String get setupCheckTitle => 'Setup Check';
+
+  @override
+  String get setupCheckSubtitle =>
+      'Verify Kabelos is ready to send and receive';
+
+  @override
+  String get setupCheckRunning => 'Running checks...';
+
+  @override
+  String get setupCheckItemWifiOn => 'Wi-Fi is on';
+
+  @override
+  String get setupCheckItemWifiDirectReady => 'Wi-Fi Direct is ready';
+
+  @override
+  String get setupCheckItemNearbyPermission =>
+      'Nearby devices permission granted';
+
+  @override
+  String get setupCheckItemForegroundService => 'Background service is running';
+
+  @override
+  String get setupCheckItemWifiLock => 'Wi-Fi lock is held';
+
+  @override
+  String get setupCheckItemWakeLock => 'Wake lock is held';
+
+  @override
+  String get setupCheckItemSamsungNearbyScanning =>
+      'Samsung Nearby device scanning is ON';
+
+  @override
+  String get setupCheckPass => 'Pass';
+
+  @override
+  String get setupCheckFail => 'Needs attention';
+
+  @override
+  String get setupCheckFixIt => 'Fix it';
+
+  @override
+  String get setupCheckAllGood => 'All checks passed — Kabelos is ready!';
+
+  @override
+  String get setupCheckSomeFailed =>
+      'Some checks failed. Tap \"Fix it\" to resolve.';
+
+  @override
+  String get qrPairingTitle => 'QR Pairing Helper';
+
+  @override
+  String get qrPairingSubtitle =>
+      'Show or scan a code to identify the other device';
+
+  @override
+  String get qrPairingShowCode => 'Show my code';
+
+  @override
+  String get qrPairingScanCode => 'Scan other device';
+
+  @override
+  String get qrPairingYourCode => 'Your Kabelos code';
+
+  @override
+  String get qrPairingDeviceName => 'Device name';
+
+  @override
+  String get qrPairingPairingCode => 'Pairing code';
+
+  @override
+  String get qrPairingNote =>
+      'This code helps you identify the right device. You still need to tap \"Connect\" in the device list. Wi-Fi Direct does not allow automatic pairing by code alone.';
+
+  @override
+  String get qrPairingScanning => 'Point camera at the other device\'s QR code';
+
+  @override
+  String qrPairingScanResult(String name, String code) {
+    return 'Found: $name ($code)';
+  }
+
+  @override
+  String get qrPairingPermissionCamera =>
+      'Camera permission needed to scan QR codes';
+
+  @override
+  String get photoPickerTitle => 'Send Photos';
+
+  @override
+  String get photoPickerSubtitle => 'Select photos from your library to send';
+
+  @override
+  String get photoPickerSelectPhotos => 'Select photos';
+
+  @override
+  String get photoPickerNoPhotosSelected => 'No photos selected';
+
+  @override
+  String photoPickerSelectedCount(int count) {
+    return '$count photo(s) selected';
+  }
+
+  @override
+  String photoPickerSend(int count) {
+    return 'Send $count photo(s)';
+  }
+
+  @override
+  String get photoPickerPermissionPhotos =>
+      'Photos permission needed to access your library';
+
+  @override
+  String get deviceInfoTitle => 'Device Information';
+
+  @override
+  String get deviceInfoSubtitle =>
+      'Details about this device and the Wi-Fi Direct connection';
+
+  @override
+  String get deviceInfoThisDevice => 'This Device';
+
+  @override
+  String get deviceInfoConnectedPeer => 'Connected Peer';
+
+  @override
+  String get deviceInfoDeviceName => 'Device name';
+
+  @override
+  String get deviceInfoModel => 'Model';
+
+  @override
+  String get deviceInfoAndroidVersion => 'Android version';
+
+  @override
+  String get deviceInfoAppVersion => 'App version';
+
+  @override
+  String get deviceInfoWifiDirectStatus => 'Wi-Fi Direct status';
+
+  @override
+  String get deviceInfoIsGroupOwner => 'Group owner';
+
+  @override
+  String get deviceInfoGroupOwner => 'Group Owner';
+
+  @override
+  String get deviceInfoClient => 'Client';
+
+  @override
+  String get deviceInfoNetworkAddress => 'Network address';
+
+  @override
+  String get deviceInfoPassphrase => 'Passphrase';
+
+  @override
+  String get deviceInfoFrequency => 'Frequency';
+
+  @override
+  String get deviceInfoWifiState => 'Wi-Fi state';
+
+  @override
+  String get deviceInfoForegroundService => 'Background service';
+
+  @override
+  String get deviceInfoWifiLock => 'Wi-Fi lock';
+
+  @override
+  String get deviceInfoWakeLock => 'Wake lock';
+
+  @override
+  String get deviceInfoRunning => 'Running';
+
+  @override
+  String get deviceInfoStopped => 'Stopped';
+
+  @override
+  String get deviceInfoHeld => 'Held';
+
+  @override
+  String get deviceInfoNotHeld => 'Not held';
+
+  @override
+  String get deviceInfoPeerCapabilities => 'Peer capabilities';
+
+  @override
+  String get deviceInfoSessionCapabilities => 'Session capabilities';
+
+  @override
+  String get deviceInfoCopy => 'Copy details';
+
+  @override
+  String get deviceInfoCopied => 'Copied to clipboard';
+
+  @override
+  String get servicePromptTitle => 'Keep Kabelos running?';
+
+  @override
+  String get servicePromptDescription =>
+      'Keep Kabelos running in the background so you can receive files even when the app is closed. A persistent notification will show the status.';
+
+  @override
+  String get servicePromptEnable => 'Enable background service';
+
+  @override
+  String get servicePromptDisable => 'Disable background service';
+
+  @override
+  String get servicePromptRunning => 'Background service is running';
+
+  @override
+  String get servicePromptStopped => 'Background service is stopped';
+
+  @override
+  String get servicePromptLearnMore => 'Learn more';
+
+  @override
+  String get servicePromptDismiss => 'Not now';
+
+  @override
+  String get settingsShowChat => 'Show Chat tab';
+
+  @override
+  String get settingsShowAudioLink => 'Show Audio Link tab';
+
+  @override
+  String get settingsShowSpeedTest => 'Show Speed Test tab';
+
+  @override
+  String get settingsKeepServiceRunning => 'Keep Kabelos running in background';
+
+  @override
+  String get settingsKeepServiceRunningDescription =>
+      'When enabled, Kabelos runs a background service to receive files even when the app is closed. Shows a persistent notification.';
+
+  @override
+  String get settingsTabsVisibility => 'Visible tabs';
+
+  @override
+  String get connectionTabTitle => 'Devices';
+
+  @override
+  String get connectionTabSubtitle => 'Find and connect to nearby devices';
+
+  @override
+  String connectionStatusConnected(String name) {
+    return 'Connected to $name';
+  }
+
+  @override
+  String get connectionStatusReady => 'Ready — Wi-Fi Direct is on';
+
+  @override
+  String get connectionStatusWifiOff =>
+      'Wi-Fi is off — Turn on Wi-Fi to continue';
+
+  @override
+  String get connectionStatusDisabled => 'Disabled — Check settings';
+
+  @override
+  String get connectionSetupCheck => 'Setup check';
+
+  @override
+  String get connectionQrPairing => 'QR pairing';
+
+  @override
+  String get connectionDeviceInfo => 'Device info';
+
+  @override
+  String get filesTabTitle => 'Files';
+
+  @override
+  String get photosTabTitle => 'Photos';
+
+  @override
+  String get wifiSettingsOpened => 'Opening Wi-Fi settings...';
+
+  @override
+  String get nearbyDevicesSettingsOpened =>
+      'Opening Nearby devices settings...';
+
+  @override
+  String get samsungNearbyScanningSettingsOpened =>
+      'Opening Samsung Nearby scanning settings...';
+
+  @override
+  String get appSettingsOpened => 'Opening app permissions...';
 }

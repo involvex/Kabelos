@@ -543,7 +543,7 @@
   "@flutterAppRepository": {
     "description": "Flutter app repository title"
   },
-  "flutterAppDescription": "WDCable Flutter - Mobile WiFi Direct file transfer app",
+  "flutterAppDescription": "Kabelos - Offline file & photo sharing nearby",
   "@flutterAppDescription": {
     "description": "Flutter app repository description"
   },
@@ -619,5 +619,451 @@
   "audioStateStreaming": "Streaming",
   "audioStateIdle": "Idle",
   "notAvailableShort": "N/A",
-  "kbpsUnit": "kbps"
+  "kbpsUnit": "kbps",
+
+  "appTitleNew": "Kabelos",
+  "@appTitleNew": {
+    "description": "New app title for Kabelos rebrand"
+  },
+  "appTagline": "Share files between nearby devices — no internet needed",
+  "@appTagline": {
+    "description": "Short tagline for app store and onboarding"
+  },
+
+  "onboardingTitle": "Welcome to Kabelos",
+  "@onboardingTitle": {
+    "description": "Onboarding screen title"
+  },
+  "onboardingSubtitle": "Share photos, files, and more with nearby devices over Wi-Fi Direct",
+  "@onboardingSubtitle": {
+    "description": "Onboarding screen subtitle"
+  },
+  "onboardingStep1Title": "Turn on Wi-Fi",
+  "@onboardingStep1Title": {
+    "description": "Onboarding step 1 title"
+  },
+  "onboardingStep1Description": "Kabelos uses Wi-Fi Direct to connect directly to nearby devices. No internet, router, or hotspot required.",
+  "@onboardingStep1Description": {
+    "description": "Onboarding step 1 description"
+  },
+  "onboardingStep2Title": "Allow nearby device access",
+  "@onboardingStep2Title": {
+    "description": "Onboarding step 2 title"
+  },
+  "onboardingStep2Description": "Android 13+ requires permission to find and connect to nearby devices. This does not use your location.",
+  "@onboardingStep2Description": {
+    "description": "Onboarding step 2 description"
+  },
+  "onboardingStep3Title": "Keep Kabelos running",
+  "@onboardingStep3Title": {
+    "description": "Onboarding step 3 title"
+  },
+  "onboardingStep3Description": "Enable the background service so Kabelos stays ready to receive files even when the app is closed. You can change this later in Settings.",
+  "@onboardingStep3Description": {
+    "description": "Onboarding step 3 description"
+  },
+  "onboardingStep4Title": "Samsung One UI note",
+  "@onboardingStep4Title": {
+    "description": "Onboarding step 4 title for Samsung devices"
+  },
+  "onboardingStep4Description": "On Samsung tablets and phones: open Settings → Connections → More connection settings → Nearby device scanning and turn it ON. Also check Settings → Apps → Kabelos → Permissions → Nearby devices = Allow.",
+  "@onboardingStep4Description": {
+    "description": "Onboarding step 4 description for Samsung One UI specific settings"
+  },
+  "onboardingContinue": "Continue",
+  "@onboardingContinue": {
+    "description": "Onboarding continue button"
+  },
+  "onboardingFinish": "Finish setup",
+  "@onboardingFinish": {
+    "description": "Onboarding finish button"
+  },
+  "onboardingSkip": "Skip",
+  "@onboardingSkip": {
+    "description": "Onboarding skip button"
+  },
+  "onboardingChecking": "Checking setup...",
+  "@onboardingChecking": {
+    "description": "Onboarding auto-check status"
+  },
+  "onboardingCheckPassed": "Setup looks good!",
+  "@onboardingCheckPassed": {
+    "description": "Onboarding check passed message"
+  },
+  "onboardingCheckFailed": "Some items need attention",
+  "@onboardingCheckFailed": {
+    "description": "Onboarding check failed message"
+  },
+
+  "setupCheckTitle": "Setup Check",
+  "@setupCheckTitle": {
+    "description": "Setup check screen title"
+  },
+  "setupCheckSubtitle": "Verify Kabelos is ready to send and receive",
+  "@setupCheckSubtitle": {
+    "description": "Setup check screen subtitle"
+  },
+  "setupCheckRunning": "Running checks...",
+  "@setupCheckRunning": {
+    "description": "Setup check running status"
+  },
+  "setupCheckItemWifiOn": "Wi-Fi is on",
+  "@setupCheckItemWifiOn": {
+    "description": "Setup check item: Wi-Fi enabled"
+  },
+  "setupCheckItemWifiDirectReady": "Wi-Fi Direct is ready",
+  "@setupCheckItemWifiDirectReady": {
+    "description": "Setup check item: Wi-Fi Direct driver ready"
+  },
+  "setupCheckItemNearbyPermission": "Nearby devices permission granted",
+  "@setupCheckItemNearbyPermission": {
+    "description": "Setup check item: nearby devices permission"
+  },
+  "setupCheckItemForegroundService": "Background service is running",
+  "@setupCheckItemForegroundService": {
+    "description": "Setup check item: foreground service running"
+  },
+  "setupCheckItemWifiLock": "Wi-Fi lock is held",
+  "@setupCheckItemWifiLock": {
+    "description": "Setup check item: Wi-Fi lock held"
+  },
+  "setupCheckItemWakeLock": "Wake lock is held",
+  "@setupCheckItemWakeLock": {
+    "description": "Setup check item: wake lock held"
+  },
+  "setupCheckItemSamsungNearbyScanning": "Samsung Nearby device scanning is ON",
+  "@setupCheckItemSamsungNearbyScanning": {
+    "description": "Setup check item: Samsung nearby scanning"
+  },
+  "setupCheckPass": "Pass",
+  "@setupCheckPass": {
+    "description": "Setup check item passed"
+  },
+  "setupCheckFail": "Needs attention",
+  "@setupCheckFail": {
+    "description": "Setup check item failed"
+  },
+  "setupCheckFixIt": "Fix it",
+  "@setupCheckFixIt": {
+    "description": "Button to open settings to fix a failed check"
+  },
+  "setupCheckAllGood": "All checks passed — Kabelos is ready!",
+  "@setupCheckAllGood": {
+    "description": "Message when all setup checks pass"
+  },
+  "setupCheckSomeFailed": "Some checks failed. Tap \"Fix it\" to resolve.",
+  "@setupCheckSomeFailed": {
+    "description": "Message when some checks fail"
+  },
+
+  "qrPairingTitle": "QR Pairing Helper",
+  "@qrPairingTitle": {
+    "description": "QR pairing screen title"
+  },
+  "qrPairingSubtitle": "Show or scan a code to identify the other device",
+  "@qrPairingSubtitle": {
+    "description": "QR pairing screen subtitle"
+  },
+  "qrPairingShowCode": "Show my code",
+  "@qrPairingShowCode": {
+    "description": "Button to show QR code with device identity"
+  },
+  "qrPairingScanCode": "Scan other device",
+  "@qrPairingScanCode": {
+    "description": "Button to scan another device's QR code"
+  },
+  "qrPairingYourCode": "Your Kabelos code",
+  "@qrPairingYourCode": {
+    "description": "Label for displayed QR code"
+  },
+  "qrPairingDeviceName": "Device name",
+  "@qrPairingDeviceName": {
+    "description": "Label for device name in QR code"
+  },
+  "qrPairingPairingCode": "Pairing code",
+  "@qrPairingPairingCode": {
+    "description": "Label for 8-digit pairing code"
+  },
+  "qrPairingNote": "This code helps you identify the right device. You still need to tap \"Connect\" in the device list. Wi-Fi Direct does not allow automatic pairing by code alone.",
+  "@qrPairingNote": {
+    "description": "Honest disclaimer about QR code limitations"
+  },
+  "qrPairingScanning": "Point camera at the other device's QR code",
+  "@qrPairingScanning": {
+    "description": "Scanning instruction"
+  },
+  "qrPairingScanResult": "Found: {name} ({code})",
+  "@qrPairingScanResult": {
+    "description": "Scan result format",
+    "placeholders": {
+      "name": { "type": "String" },
+      "code": { "type": "String" }
+    }
+  },
+  "qrPairingPermissionCamera": "Camera permission needed to scan QR codes",
+  "@qrPairingPermissionCamera": {
+    "description": "Camera permission rationale"
+  },
+
+  "photoPickerTitle": "Send Photos",
+  "@photoPickerTitle": {
+    "description": "Photo picker tab title"
+  },
+  "photoPickerSubtitle": "Select photos from your library to send",
+  "@photoPickerSubtitle": {
+    "description": "Photo picker tab subtitle"
+  },
+  "photoPickerSelectPhotos": "Select photos",
+  "@photoPickerSelectPhotos": {
+    "description": "Button to open photo library"
+  },
+  "photoPickerNoPhotosSelected": "No photos selected",
+  "@photoPickerNoPhotosSelected": {
+    "description": "Message when no photos picked"
+  },
+  "photoPickerSelectedCount": "{count} photo(s) selected",
+  "@photoPickerSelectedCount": {
+    "description": "Selected photo count",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "photoPickerSend": "Send {count} photo(s)",
+  "@photoPickerSend": {
+    "description": "Send selected photos button",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "photoPickerPermissionPhotos": "Photos permission needed to access your library",
+  "@photoPickerPermissionPhotos": {
+    "description": "Photos permission rationale"
+  },
+
+  "deviceInfoTitle": "Device Information",
+  "@deviceInfoTitle": {
+    "description": "Device info screen title"
+  },
+  "deviceInfoSubtitle": "Details about this device and the Wi-Fi Direct connection",
+  "@deviceInfoSubtitle": {
+    "description": "Device info screen subtitle"
+  },
+  "deviceInfoThisDevice": "This Device",
+  "@deviceInfoThisDevice": {
+    "description": "Section title for local device info"
+  },
+  "deviceInfoConnectedPeer": "Connected Peer",
+  "@deviceInfoConnectedPeer": {
+    "description": "Section title for connected peer info"
+  },
+  "deviceInfoDeviceName": "Device name",
+  "@deviceInfoDeviceName": {
+    "description": "Device name label"
+  },
+  "deviceInfoModel": "Model",
+  "@deviceInfoModel": {
+    "description": "Device model label"
+  },
+  "deviceInfoAndroidVersion": "Android version",
+  "@deviceInfoAndroidVersion": {
+    "description": "Android version label"
+  },
+  "deviceInfoAppVersion": "App version",
+  "@deviceInfoAppVersion": {
+    "description": "App version label"
+  },
+  "deviceInfoWifiDirectStatus": "Wi-Fi Direct status",
+  "@deviceInfoWifiDirectStatus": {
+    "description": "Wi-Fi Direct status label"
+  },
+  "deviceInfoIsGroupOwner": "Group owner",
+  "@deviceInfoIsGroupOwner": {
+    "description": "Group owner label"
+  },
+  "deviceInfoGroupOwner": "Group Owner",
+  "@deviceInfoGroupOwner": {
+    "description": "Group owner value: yes"
+  },
+  "deviceInfoClient": "Client",
+  "@deviceInfoClient": {
+    "description": "Group owner value: no"
+  },
+  "deviceInfoNetworkAddress": "Network address",
+  "@deviceInfoNetworkAddress": {
+    "description": "Network address label"
+  },
+  "deviceInfoPassphrase": "Passphrase",
+  "@deviceInfoPassphrase": {
+    "description": "Passphrase label"
+  },
+  "deviceInfoFrequency": "Frequency",
+  "@deviceInfoFrequency": {
+    "description": "Wi-Fi frequency label"
+  },
+  "deviceInfoWifiState": "Wi-Fi state",
+  "@deviceInfoWifiState": {
+    "description": "Wi-Fi state label"
+  },
+  "deviceInfoForegroundService": "Background service",
+  "@deviceInfoForegroundService": {
+    "description": "Foreground service label"
+  },
+  "deviceInfoWifiLock": "Wi-Fi lock",
+  "@deviceInfoWifiLock": {
+    "description": "Wi-Fi lock label"
+  },
+  "deviceInfoWakeLock": "Wake lock",
+  "@deviceInfoWakeLock": {
+    "description": "Wake lock label"
+  },
+  "deviceInfoRunning": "Running",
+  "@deviceInfoRunning": {
+    "description": "Service running status"
+  },
+  "deviceInfoStopped": "Stopped",
+  "@deviceInfoStopped": {
+    "description": "Service stopped status"
+  },
+  "deviceInfoHeld": "Held",
+  "@deviceInfoHeld": {
+    "description": "Lock held status"
+  },
+  "deviceInfoNotHeld": "Not held",
+  "@deviceInfoNotHeld": {
+    "description": "Lock not held status"
+  },
+  "deviceInfoPeerCapabilities": "Peer capabilities",
+  "@deviceInfoPeerCapabilities": {
+    "description": "Peer capabilities label"
+  },
+  "deviceInfoSessionCapabilities": "Session capabilities",
+  "@deviceInfoSessionCapabilities": {
+    "description": "Session capabilities label"
+  },
+  "deviceInfoCopy": "Copy details",
+  "@deviceInfoCopy": {
+    "description": "Copy device info to clipboard button"
+  },
+  "deviceInfoCopied": "Copied to clipboard",
+  "@deviceInfoCopied": {
+    "description": "Toast when copied"
+  },
+
+  "servicePromptTitle": "Keep Kabelos running?",
+  "@servicePromptTitle": {
+    "description": "Foreground service prompt title"
+  },
+  "servicePromptDescription": "Keep Kabelos running in the background so you can receive files even when the app is closed. A persistent notification will show the status.",
+  "@servicePromptDescription": {
+    "description": "Foreground service prompt description"
+  },
+  "servicePromptEnable": "Enable background service",
+  "@servicePromptEnable": {
+    "description": "Button to enable foreground service"
+  },
+  "servicePromptDisable": "Disable background service",
+  "@servicePromptDisable": {
+    "description": "Button to disable foreground service"
+  },
+  "servicePromptRunning": "Background service is running",
+  "@servicePromptRunning": {
+    "description": "Status when service is running"
+  },
+  "servicePromptStopped": "Background service is stopped",
+  "@servicePromptStopped": {
+    "description": "Status when service is stopped"
+  },
+  "servicePromptLearnMore": "Learn more",
+  "@servicePromptLearnMore": {
+    "description": "Link to explanation"
+  },
+  "servicePromptDismiss": "Not now",
+  "@servicePromptDismiss": {
+    "description": "Dismiss prompt button"
+  },
+
+  "settingsShowChat": "Show Chat tab",
+  "@settingsShowChat": {
+    "description": "Toggle to show/hide Chat tab"
+  },
+  "settingsShowAudioLink": "Show Audio Link tab",
+  "@settingsShowAudioLink": {
+    "description": "Toggle to show/hide Audio Link tab"
+  },
+  "settingsShowSpeedTest": "Show Speed Test tab",
+  "@settingsShowSpeedTest": {
+    "description": "Toggle to show/hide Speed Test tab"
+  },
+  "settingsKeepServiceRunning": "Keep Kabelos running in background",
+  "@settingsKeepServiceRunning": {
+    "description": "Toggle for foreground service"
+  },
+  "settingsKeepServiceRunningDescription": "When enabled, Kabelos runs a background service to receive files even when the app is closed. Shows a persistent notification.",
+  "@settingsKeepServiceRunningDescription": {
+    "description": "Background service toggle description"
+  },
+  "settingsTabsVisibility": "Visible tabs",
+  "@settingsTabsVisibility": {
+    "description": "Section title for tab visibility toggles"
+  },
+
+  "connectionTabTitle": "Devices",
+  "@connectionTabTitle": {
+    "description": "Connection tab title (replaces Scan)"
+  },
+  "connectionTabSubtitle": "Find and connect to nearby devices",
+  "@connectionTabSubtitle": {
+    "description": "Connection tab subtitle"
+  },
+  "connectionStatusConnected": "Connected to {name}",
+  "@connectionStatusConnected": {
+    "description": "Connected status with device name",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "connectionStatusReady": "Ready — Wi-Fi Direct is on",
+  "@connectionStatusReady": {
+    "description": "Ready status when Wi-Fi Direct is enabled"
+  },
+  "connectionStatusWifiOff": "Wi-Fi is off — Turn on Wi-Fi to continue",
+  "@connectionStatusWifiOff": {
+    "description": "Status when Wi-Fi is disabled"
+  },
+  "connectionStatusDisabled": "Disabled — Check settings",
+  "@connectionStatusDisabled": {
+    "description": "Status when Wi-Fi Direct is unavailable"
+  },
+  "connectionSetupCheck": "Setup check",
+  "@connectionSetupCheck": {
+    "description": "Setup check button in connection tab"
+  },
+  "connectionQrPairing": "QR pairing",
+  "@connectionQrPairing": {
+    "description": "QR pairing button in connection tab"
+  },
+  "connectionDeviceInfo": "Device info",
+  "@connectionDeviceInfo": {
+    "description": "Device info button in connection tab"
+  },
+
+  "filesTabTitle": "Files",
+  "@filesTabTitle": {
+    "description": "Files tab title"
+  },
+  "photosTabTitle": "Photos",
+  "@photosTabTitle": {
+    "description": "Photos tab title"
+  },
+
+  "wifiSettingsOpened": "Opening Wi-Fi settings...",
+  "@wifiSettingsOpened": {
+    "description": "Toast when opening Wi-Fi settings"
+  },
+  "nearbyDevicesSettingsOpened": "Opening Nearby devices settings...",
+  "@nearbyDevicesSettingsOpened": {
+    "description": "Toast when opening nearby devices settings"
+  },
+  "samsungNearbyScanningSettingsOpened": "Opening Samsung Nearby scanning settings...",
+  "@samsungNearbyScanningSettingsOpened": {
+    "description": "Toast when opening Samsung nearby scanning settings"
+  },
+  "appSettingsOpened": "Opening app permissions...",
+  "@appSettingsOpened": {
+    "description": "Toast when opening app permissions"
+  }
 }

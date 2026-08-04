@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_zh.dart';
 
@@ -94,6 +95,7 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en'),
     Locale('zh'),
   ];
@@ -803,7 +805,7 @@ abstract class AppLocalizations {
   /// Flutter app repository description
   ///
   /// In en, this message translates to:
-  /// **'WDCable Flutter - Mobile WiFi Direct file transfer app'**
+  /// **'Kabelos - Offline file & photo sharing nearby'**
   String get flutterAppDescription;
 
   /// Windows app repository title
@@ -1123,6 +1125,648 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'kbps'**
   String get kbpsUnit;
+
+  /// New app title for Kabelos rebrand
+  ///
+  /// In en, this message translates to:
+  /// **'Kabelos'**
+  String get appTitleNew;
+
+  /// Short tagline for app store and onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Share files between nearby devices — no internet needed'**
+  String get appTagline;
+
+  /// Onboarding screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Kabelos'**
+  String get onboardingTitle;
+
+  /// Onboarding screen subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Share photos, files, and more with nearby devices over Wi-Fi Direct'**
+  String get onboardingSubtitle;
+
+  /// Onboarding step 1 title
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Wi-Fi'**
+  String get onboardingStep1Title;
+
+  /// Onboarding step 1 description
+  ///
+  /// In en, this message translates to:
+  /// **'Kabelos uses Wi-Fi Direct to connect directly to nearby devices. No internet, router, or hotspot required.'**
+  String get onboardingStep1Description;
+
+  /// Onboarding step 2 title
+  ///
+  /// In en, this message translates to:
+  /// **'Allow nearby device access'**
+  String get onboardingStep2Title;
+
+  /// Onboarding step 2 description
+  ///
+  /// In en, this message translates to:
+  /// **'Android 13+ requires permission to find and connect to nearby devices. This does not use your location.'**
+  String get onboardingStep2Description;
+
+  /// Onboarding step 3 title
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Kabelos running'**
+  String get onboardingStep3Title;
+
+  /// Onboarding step 3 description
+  ///
+  /// In en, this message translates to:
+  /// **'Enable the background service so Kabelos stays ready to receive files even when the app is closed. You can change this later in Settings.'**
+  String get onboardingStep3Description;
+
+  /// Onboarding step 4 title for Samsung devices
+  ///
+  /// In en, this message translates to:
+  /// **'Samsung One UI note'**
+  String get onboardingStep4Title;
+
+  /// Onboarding step 4 description for Samsung One UI specific settings
+  ///
+  /// In en, this message translates to:
+  /// **'On Samsung tablets and phones: open Settings → Connections → More connection settings → Nearby device scanning and turn it ON. Also check Settings → Apps → Kabelos → Permissions → Nearby devices = Allow.'**
+  String get onboardingStep4Description;
+
+  /// Onboarding continue button
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingContinue;
+
+  /// Onboarding finish button
+  ///
+  /// In en, this message translates to:
+  /// **'Finish setup'**
+  String get onboardingFinish;
+
+  /// Onboarding skip button
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// Onboarding auto-check status
+  ///
+  /// In en, this message translates to:
+  /// **'Checking setup...'**
+  String get onboardingChecking;
+
+  /// Onboarding check passed message
+  ///
+  /// In en, this message translates to:
+  /// **'Setup looks good!'**
+  String get onboardingCheckPassed;
+
+  /// Onboarding check failed message
+  ///
+  /// In en, this message translates to:
+  /// **'Some items need attention'**
+  String get onboardingCheckFailed;
+
+  /// Setup check screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Check'**
+  String get setupCheckTitle;
+
+  /// Setup check screen subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Kabelos is ready to send and receive'**
+  String get setupCheckSubtitle;
+
+  /// Setup check running status
+  ///
+  /// In en, this message translates to:
+  /// **'Running checks...'**
+  String get setupCheckRunning;
+
+  /// Setup check item: Wi-Fi enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi is on'**
+  String get setupCheckItemWifiOn;
+
+  /// Setup check item: Wi-Fi Direct driver ready
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi Direct is ready'**
+  String get setupCheckItemWifiDirectReady;
+
+  /// Setup check item: nearby devices permission
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby devices permission granted'**
+  String get setupCheckItemNearbyPermission;
+
+  /// Setup check item: foreground service running
+  ///
+  /// In en, this message translates to:
+  /// **'Background service is running'**
+  String get setupCheckItemForegroundService;
+
+  /// Setup check item: Wi-Fi lock held
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi lock is held'**
+  String get setupCheckItemWifiLock;
+
+  /// Setup check item: wake lock held
+  ///
+  /// In en, this message translates to:
+  /// **'Wake lock is held'**
+  String get setupCheckItemWakeLock;
+
+  /// Setup check item: Samsung nearby scanning
+  ///
+  /// In en, this message translates to:
+  /// **'Samsung Nearby device scanning is ON'**
+  String get setupCheckItemSamsungNearbyScanning;
+
+  /// Setup check item passed
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get setupCheckPass;
+
+  /// Setup check item failed
+  ///
+  /// In en, this message translates to:
+  /// **'Needs attention'**
+  String get setupCheckFail;
+
+  /// Button to open settings to fix a failed check
+  ///
+  /// In en, this message translates to:
+  /// **'Fix it'**
+  String get setupCheckFixIt;
+
+  /// Message when all setup checks pass
+  ///
+  /// In en, this message translates to:
+  /// **'All checks passed — Kabelos is ready!'**
+  String get setupCheckAllGood;
+
+  /// Message when some checks fail
+  ///
+  /// In en, this message translates to:
+  /// **'Some checks failed. Tap \"Fix it\" to resolve.'**
+  String get setupCheckSomeFailed;
+
+  /// QR pairing screen title
+  ///
+  /// In en, this message translates to:
+  /// **'QR Pairing Helper'**
+  String get qrPairingTitle;
+
+  /// QR pairing screen subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Show or scan a code to identify the other device'**
+  String get qrPairingSubtitle;
+
+  /// Button to show QR code with device identity
+  ///
+  /// In en, this message translates to:
+  /// **'Show my code'**
+  String get qrPairingShowCode;
+
+  /// Button to scan another device's QR code
+  ///
+  /// In en, this message translates to:
+  /// **'Scan other device'**
+  String get qrPairingScanCode;
+
+  /// Label for displayed QR code
+  ///
+  /// In en, this message translates to:
+  /// **'Your Kabelos code'**
+  String get qrPairingYourCode;
+
+  /// Label for device name in QR code
+  ///
+  /// In en, this message translates to:
+  /// **'Device name'**
+  String get qrPairingDeviceName;
+
+  /// Label for 8-digit pairing code
+  ///
+  /// In en, this message translates to:
+  /// **'Pairing code'**
+  String get qrPairingPairingCode;
+
+  /// Honest disclaimer about QR code limitations
+  ///
+  /// In en, this message translates to:
+  /// **'This code helps you identify the right device. You still need to tap \"Connect\" in the device list. Wi-Fi Direct does not allow automatic pairing by code alone.'**
+  String get qrPairingNote;
+
+  /// Scanning instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Point camera at the other device\'s QR code'**
+  String get qrPairingScanning;
+
+  /// Scan result format
+  ///
+  /// In en, this message translates to:
+  /// **'Found: {name} ({code})'**
+  String qrPairingScanResult(String name, String code);
+
+  /// Camera permission rationale
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission needed to scan QR codes'**
+  String get qrPairingPermissionCamera;
+
+  /// Photo picker tab title
+  ///
+  /// In en, this message translates to:
+  /// **'Send Photos'**
+  String get photoPickerTitle;
+
+  /// Photo picker tab subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Select photos from your library to send'**
+  String get photoPickerSubtitle;
+
+  /// Button to open photo library
+  ///
+  /// In en, this message translates to:
+  /// **'Select photos'**
+  String get photoPickerSelectPhotos;
+
+  /// Message when no photos picked
+  ///
+  /// In en, this message translates to:
+  /// **'No photos selected'**
+  String get photoPickerNoPhotosSelected;
+
+  /// Selected photo count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} photo(s) selected'**
+  String photoPickerSelectedCount(int count);
+
+  /// Send selected photos button
+  ///
+  /// In en, this message translates to:
+  /// **'Send {count} photo(s)'**
+  String photoPickerSend(int count);
+
+  /// Photos permission rationale
+  ///
+  /// In en, this message translates to:
+  /// **'Photos permission needed to access your library'**
+  String get photoPickerPermissionPhotos;
+
+  /// Device info screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Device Information'**
+  String get deviceInfoTitle;
+
+  /// Device info screen subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Details about this device and the Wi-Fi Direct connection'**
+  String get deviceInfoSubtitle;
+
+  /// Section title for local device info
+  ///
+  /// In en, this message translates to:
+  /// **'This Device'**
+  String get deviceInfoThisDevice;
+
+  /// Section title for connected peer info
+  ///
+  /// In en, this message translates to:
+  /// **'Connected Peer'**
+  String get deviceInfoConnectedPeer;
+
+  /// Device name label
+  ///
+  /// In en, this message translates to:
+  /// **'Device name'**
+  String get deviceInfoDeviceName;
+
+  /// Device model label
+  ///
+  /// In en, this message translates to:
+  /// **'Model'**
+  String get deviceInfoModel;
+
+  /// Android version label
+  ///
+  /// In en, this message translates to:
+  /// **'Android version'**
+  String get deviceInfoAndroidVersion;
+
+  /// App version label
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get deviceInfoAppVersion;
+
+  /// Wi-Fi Direct status label
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi Direct status'**
+  String get deviceInfoWifiDirectStatus;
+
+  /// Group owner label
+  ///
+  /// In en, this message translates to:
+  /// **'Group owner'**
+  String get deviceInfoIsGroupOwner;
+
+  /// Group owner value: yes
+  ///
+  /// In en, this message translates to:
+  /// **'Group Owner'**
+  String get deviceInfoGroupOwner;
+
+  /// Group owner value: no
+  ///
+  /// In en, this message translates to:
+  /// **'Client'**
+  String get deviceInfoClient;
+
+  /// Network address label
+  ///
+  /// In en, this message translates to:
+  /// **'Network address'**
+  String get deviceInfoNetworkAddress;
+
+  /// Passphrase label
+  ///
+  /// In en, this message translates to:
+  /// **'Passphrase'**
+  String get deviceInfoPassphrase;
+
+  /// Wi-Fi frequency label
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get deviceInfoFrequency;
+
+  /// Wi-Fi state label
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi state'**
+  String get deviceInfoWifiState;
+
+  /// Foreground service label
+  ///
+  /// In en, this message translates to:
+  /// **'Background service'**
+  String get deviceInfoForegroundService;
+
+  /// Wi-Fi lock label
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi lock'**
+  String get deviceInfoWifiLock;
+
+  /// Wake lock label
+  ///
+  /// In en, this message translates to:
+  /// **'Wake lock'**
+  String get deviceInfoWakeLock;
+
+  /// Service running status
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get deviceInfoRunning;
+
+  /// Service stopped status
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
+  String get deviceInfoStopped;
+
+  /// Lock held status
+  ///
+  /// In en, this message translates to:
+  /// **'Held'**
+  String get deviceInfoHeld;
+
+  /// Lock not held status
+  ///
+  /// In en, this message translates to:
+  /// **'Not held'**
+  String get deviceInfoNotHeld;
+
+  /// Peer capabilities label
+  ///
+  /// In en, this message translates to:
+  /// **'Peer capabilities'**
+  String get deviceInfoPeerCapabilities;
+
+  /// Session capabilities label
+  ///
+  /// In en, this message translates to:
+  /// **'Session capabilities'**
+  String get deviceInfoSessionCapabilities;
+
+  /// Copy device info to clipboard button
+  ///
+  /// In en, this message translates to:
+  /// **'Copy details'**
+  String get deviceInfoCopy;
+
+  /// Toast when copied
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get deviceInfoCopied;
+
+  /// Foreground service prompt title
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Kabelos running?'**
+  String get servicePromptTitle;
+
+  /// Foreground service prompt description
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Kabelos running in the background so you can receive files even when the app is closed. A persistent notification will show the status.'**
+  String get servicePromptDescription;
+
+  /// Button to enable foreground service
+  ///
+  /// In en, this message translates to:
+  /// **'Enable background service'**
+  String get servicePromptEnable;
+
+  /// Button to disable foreground service
+  ///
+  /// In en, this message translates to:
+  /// **'Disable background service'**
+  String get servicePromptDisable;
+
+  /// Status when service is running
+  ///
+  /// In en, this message translates to:
+  /// **'Background service is running'**
+  String get servicePromptRunning;
+
+  /// Status when service is stopped
+  ///
+  /// In en, this message translates to:
+  /// **'Background service is stopped'**
+  String get servicePromptStopped;
+
+  /// Link to explanation
+  ///
+  /// In en, this message translates to:
+  /// **'Learn more'**
+  String get servicePromptLearnMore;
+
+  /// Dismiss prompt button
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get servicePromptDismiss;
+
+  /// Toggle to show/hide Chat tab
+  ///
+  /// In en, this message translates to:
+  /// **'Show Chat tab'**
+  String get settingsShowChat;
+
+  /// Toggle to show/hide Audio Link tab
+  ///
+  /// In en, this message translates to:
+  /// **'Show Audio Link tab'**
+  String get settingsShowAudioLink;
+
+  /// Toggle to show/hide Speed Test tab
+  ///
+  /// In en, this message translates to:
+  /// **'Show Speed Test tab'**
+  String get settingsShowSpeedTest;
+
+  /// Toggle for foreground service
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Kabelos running in background'**
+  String get settingsKeepServiceRunning;
+
+  /// Background service toggle description
+  ///
+  /// In en, this message translates to:
+  /// **'When enabled, Kabelos runs a background service to receive files even when the app is closed. Shows a persistent notification.'**
+  String get settingsKeepServiceRunningDescription;
+
+  /// Section title for tab visibility toggles
+  ///
+  /// In en, this message translates to:
+  /// **'Visible tabs'**
+  String get settingsTabsVisibility;
+
+  /// Connection tab title (replaces Scan)
+  ///
+  /// In en, this message translates to:
+  /// **'Devices'**
+  String get connectionTabTitle;
+
+  /// Connection tab subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Find and connect to nearby devices'**
+  String get connectionTabSubtitle;
+
+  /// Connected status with device name
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to {name}'**
+  String connectionStatusConnected(String name);
+
+  /// Ready status when Wi-Fi Direct is enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Ready — Wi-Fi Direct is on'**
+  String get connectionStatusReady;
+
+  /// Status when Wi-Fi is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi is off — Turn on Wi-Fi to continue'**
+  String get connectionStatusWifiOff;
+
+  /// Status when Wi-Fi Direct is unavailable
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled — Check settings'**
+  String get connectionStatusDisabled;
+
+  /// Setup check button in connection tab
+  ///
+  /// In en, this message translates to:
+  /// **'Setup check'**
+  String get connectionSetupCheck;
+
+  /// QR pairing button in connection tab
+  ///
+  /// In en, this message translates to:
+  /// **'QR pairing'**
+  String get connectionQrPairing;
+
+  /// Device info button in connection tab
+  ///
+  /// In en, this message translates to:
+  /// **'Device info'**
+  String get connectionDeviceInfo;
+
+  /// Files tab title
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get filesTabTitle;
+
+  /// Photos tab title
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get photosTabTitle;
+
+  /// Toast when opening Wi-Fi settings
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Wi-Fi settings...'**
+  String get wifiSettingsOpened;
+
+  /// Toast when opening nearby devices settings
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Nearby devices settings...'**
+  String get nearbyDevicesSettingsOpened;
+
+  /// Toast when opening Samsung nearby scanning settings
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Samsung Nearby scanning settings...'**
+  String get samsungNearbyScanningSettingsOpened;
+
+  /// Toast when opening app permissions
+  ///
+  /// In en, this message translates to:
+  /// **'Opening app permissions...'**
+  String get appSettingsOpened;
 }
 
 class _AppLocalizationsDelegate
@@ -1136,7 +1780,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'zh'].contains(locale.languageCode);
+      <String>['de', 'en', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1145,6 +1789,8 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
     case 'zh':

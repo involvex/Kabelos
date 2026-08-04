@@ -12,10 +12,13 @@ import 'widgets/audio_tab.dart';
 import 'widgets/speed_test_tab.dart';
 import 'widgets/file_transfer_tab.dart';
 import 'widgets/settings_tab.dart';
+import 'screens/photo_picker_tab.dart';
+import 'screens/onboarding_screen.dart';
 import 'wifi_direct_service.dart';
 import 'theme/theme_provider.dart';
 import 'providers/language_provider.dart';
-import 'package:wifi_direct_cable/l10n/app_localizations.dart';
+import 'services/data_manager.dart';
+import 'package:kabelos/l10n/app_localizations.dart';
 
 void main() {
   runApp(
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
     return Consumer2<ThemeProvider, LanguageProvider>(
       builder: (context, themeProvider, languageProvider, child) {
         return MaterialApp(
-          title: 'WiFi Direct Cable',
+          title: 'Kabelos',
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           themeMode: themeProvider.themeMode,
@@ -48,38 +51,61 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: const [Locale('en'), Locale('zh')],
-          home: const WiFiDirectHomePage(),
+          supportedLocales: const [Locale('en'), Locale('de'), Locale('zh')],
+          home: const KabelosHomePage(),
         );
       },
     );
   }
 }
 
-class WiFiDirectHomePage extends StatefulWidget {
-  const WiFiDirectHomePage({super.key});
+class KabelosHomePage extends StatefulWidget {
+  const KabelosHomePage({super.key});
 
   @override
-  State<WiFiDirectHomePage> createState() => _WiFiDirectHomePageState();
+  State<KabelosHomePage> createState() => _KabelosHomePageState();
 }
 
-class _WiFiDirectHomePageState extends State<WiFiDirectHomePage>
+class _KabelosHomePageState extends State<KabelosHomePage>
     with TickerProviderStateMixin {
   late WiFiDirectController _controller;
-  late TabController _tabController;
   StreamSubscription<WiFiDirectState>? _stateSubscription;
   WiFiDirectState _state = WiFiDirectState();
+  bool _onboardingComplete = false;
+  bool _checkingOnboarding = true;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _checkOnboarding();
     _controller = WiFiDirectController(WiFiDirectService());
+    _tabController = TabController(length: 6, vsync: this);
     _initializeController();
   }
 
+  Future<void> _checkOnboarding() async {
+    final complete =
+        await DataManager.instance.getBool('onboarding_complete') ?? false;
+    if (mounted) {
+      setState(() {
+        _onboardingComplete = complete;
+        _checkingOnboarding = false;
+      });
+    }
+  }
+
+  Future<void> _markOnboardingComplete() async {
+    await DataManager.instance.setBool('onboarding_complete', true);
+    if (mounted) {
+      setState(() {
+        _onboardingComplete = true;
+      });
+      _rebuildTabs();
+    }
+  }
+
   void _initializeController() {
-    // Listen to state changes from the controller
     _stateSubscription = _controller.stateStream.listen((newState) {
       if (mounted) {
         setState(() {
@@ -87,8 +113,128 @@ class _WiFiDirectHomePageState extends State<WiFiDirectHomePage>
         });
       }
     });
+  }
 
-    // Controller initializes automatically in constructor
+  void _rebuildTabs() {
+    if (mounted) {
+      setState(() {
+        _tabController = TabController(length: _getTabCount(), vsync: this);
+      });
+    }
+  }
+
+  int _getTabCount() {
+    // Always show Connection, Files, Settings
+    // Photos, Chat, Audio Link, Speed Test based on settings
+    int count = 3; // Connection, Files, Settings
+    if (_state.showPhotosTab) count++;
+    if (_state.showChatTab) count++;
+    if (_state.showAudioTab) count++;
+    if (_state.showSpeedTestTab) count++;
+    return count;
+  }
+
+  List<Widget> _buildTabs() {
+    final tabs = <Widget>[
+      ConnectionTab(controller: _controller, state: _state),
+    ];
+
+    if (_state.showPhotosTab) {
+      tabs.add(PhotoPickerTab(controller: _controller, state: _state));
+    }
+
+    tabs.add(FileTransferTab(controller: _controller, state: _state));
+
+    if (_state.showChatTab) {
+      tabs.add(ChatTab(controller: _controller, state: _state));
+    }
+
+    if (_state.showSpeedTestTab) {
+      tabs.add(SpeedTestTab(controller: _controller, state: _state));
+    }
+
+    if (_state.showAudioTab) {
+      tabs.add(AudioTab(controller: _controller, state: _state));
+    }
+
+    tabs.add(
+      SettingsTab(
+        controller: _controller,
+        state: _state,
+        onTabsVisibilityChanged: _rebuildTabs,
+      ),
+    );
+
+    return tabs;
+  }
+
+  List<Tab> _buildTabButtons() {
+    final l10n = AppLocalizations.of(context)!;
+    final tabs = <Tab>[
+      Tab(
+        icon: const Icon(Icons.wifi, size: 20),
+        text: l10n.connectionTabTitle,
+        height: 60,
+      ),
+    ];
+
+    if (_state.showPhotosTab) {
+      tabs.add(
+        Tab(
+          icon: const Icon(Icons.photo_library, size: 20),
+          text: l10n.photosTabTitle,
+          height: 60,
+        ),
+      );
+    }
+
+    tabs.add(
+      Tab(
+        icon: const Icon(Icons.folder, size: 20),
+        text: l10n.filesTabTitle,
+        height: 60,
+      ),
+    );
+
+    if (_state.showChatTab) {
+      tabs.add(
+        Tab(
+          icon: const Icon(Icons.chat_bubble_outline, size: 20),
+          text: l10n.chat,
+          height: 60,
+        ),
+      );
+    }
+
+    if (_state.showSpeedTestTab) {
+      tabs.add(
+        Tab(
+          icon: const Icon(Icons.speed, size: 20),
+          text: l10n.speedTest,
+          height: 60,
+        ),
+      );
+    }
+
+    if (_state.showAudioTab) {
+      tabs.add(
+        Tab(
+          icon: const Icon(Icons.graphic_eq, size: 20),
+          text: l10n.audioLink,
+          height: 60,
+        ),
+      );
+    }
+
+    tabs.add(
+      Tab(
+        icon: const Icon(Icons.settings, size: 20),
+        text: l10n.settings,
+        height: 60,
+      ),
+    );
+
+    return tabs;
   }
 
   @override
@@ -101,6 +247,10 @@ class _WiFiDirectHomePageState extends State<WiFiDirectHomePage>
 
   @override
   Widget build(BuildContext context) {
+    if (_checkingOnboarding || !_onboardingComplete) {
+      return OnboardingScreen(onComplete: _markOnboardingComplete);
+    }
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -112,7 +262,9 @@ class _WiFiDirectHomePageState extends State<WiFiDirectHomePage>
         body: SafeArea(
           child: Column(
             children: [
-              // Modern tab bar with elevated design
+              // Status pill at top
+              _buildStatusPill(context),
+              // Tab bar
               Container(
                 margin: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -150,40 +302,78 @@ class _WiFiDirectHomePageState extends State<WiFiDirectHomePage>
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                     ),
-                    tabs: const [
-                      Tab(icon: Icon(Icons.wifi, size: 20), height: 60),
-                      Tab(
-                        icon: Icon(Icons.chat_bubble_outline, size: 20),
-                        height: 60,
-                      ),
-                      Tab(icon: Icon(Icons.speed, size: 20), height: 60),
-                      Tab(icon: Icon(Icons.graphic_eq, size: 20), height: 60),
-                      Tab(icon: Icon(Icons.folder, size: 20), height: 60),
-                      Tab(icon: Icon(Icons.settings, size: 20), height: 60),
-                    ],
+                    isScrollable: _getTabCount() > 5,
+                    tabs: _buildTabButtons(),
                   ),
                 ),
               ),
-              // Tab content with padding
+              // Tab content
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      ConnectionTab(controller: _controller, state: _state),
-                      ChatTab(controller: _controller, state: _state),
-                      SpeedTestTab(controller: _controller, state: _state),
-                      AudioTab(controller: _controller, state: _state),
-                      FileTransferTab(controller: _controller, state: _state),
-                      SettingsTab(controller: _controller, state: _state),
-                    ],
+                    children: _buildTabs(),
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildStatusPill(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    Color statusColor;
+    String statusText;
+    IconData statusIcon;
+
+    if (_state.isConnecting) {
+      statusColor = Theme.of(context).colorScheme.primary;
+      statusText = l10n.connectionStatus;
+      statusIcon = Icons.sync;
+    } else if (_state.connectionInfo != null &&
+        _state.sessionState == 'Connected') {
+      statusColor = Colors.green;
+      statusText = l10n.connectionStatusConnected(
+        _state.connectionInfo!.peerName ?? 'peer',
+      );
+      statusIcon = Icons.link;
+    } else if (_state.isWifiP2pEnabled) {
+      statusColor = Colors.blue;
+      statusText = l10n.connectionStatusReady;
+      statusIcon = Icons.wifi;
+    } else {
+      statusColor = Theme.of(context).colorScheme.error;
+      statusText = l10n.connectionStatusWifiOff;
+      statusIcon = Icons.wifi_off;
+    }
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: statusColor.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(statusIcon, size: 20, color: statusColor),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              statusText,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: statusColor,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

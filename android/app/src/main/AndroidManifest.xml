@@ -10,8 +10,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- For Android 13 (API 33) and higher -->
     <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" android:usesPermissionFlags="neverForLocation" />
+    <!-- For Android 13 (API 33) and higher - media images access -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application
-        android:label="WD Cable"
+        android:label="Kabelos"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

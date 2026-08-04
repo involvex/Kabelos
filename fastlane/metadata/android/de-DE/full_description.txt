@@ -1,0 +1,23 @@
+Kabelos erstellt eine private Verbindung zwischen nahen Geräten über Wi-Fi Direct. Nach der Verbindung teilen die Geräte eine Sitzung für Chat, Dateiübertragung und Diagnose.
+
+Kein Internet, Router, Hotspot, Account oder Cloud-Dienst erforderlich. Die Verbindung bleibt lokal zwischen den beteiligten Geräten.
+
+Funktionen:
+- Einfache Einrichtung mit automatischen Prüfungen
+- Direkte Gerät-zu-Gerät-Verbindung über Wi-Fi Direct
+- Fotos aus der Galerie oder Dateien mit einem Tastendruck senden
+- Echtzeit-Chat zwischen verbundenen Geräten
+- QR-Code-Pairing zur Geräteidentifizierung
+- Hintergrunddienst für den Dateiempfang selbst wenn die App geschlossen ist
+- Detaillierte Geräteinfo und Einrichtungsprüfung
+- Protokoll v2 Transport mit UDP Rendezvous
+
+Optionale erweiterte Funktionen (ausblendbar in Einstellungen):
+- Niedriglatenter Audio-Link mit libopus
+- Integrierte Upload- und Download-Geschwindigkeitstests
+
+Die Android-App kann mit einem anderen Android-Gerät mit Kabelos verbunden werden. Eine separate Windows-Companion-App ist ebenfalls verfügbar.
+
+Erfordert Android 13 oder neuer.
+
+Kabelos ist für einfache Offline-Teilung innerhalb der Familie konzipiert — zwei Geräte und ein paar Tipps reichen aus.

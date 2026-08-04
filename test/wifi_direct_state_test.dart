@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wifi_direct_cable/controllers/wifi_direct_controller.dart';
-import 'package:wifi_direct_cable/models/wifi_direct_models.dart';
-import 'package:wifi_direct_cable/wifi_direct_service.dart';
+import 'package:kabelos/controllers/wifi_direct_controller.dart';
+import 'package:kabelos/models/wifi_direct_models.dart';
+import 'package:kabelos/wifi_direct_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -408,7 +408,7 @@ void main() {
       expect(controller.currentState.isSessionReady, isFalse);
       expect(
         controller.currentState.logs.last,
-        contains('not running the upgraded WDCable protocol'),
+        contains('not running the upgraded Kabelos protocol'),
       );
     });
 
