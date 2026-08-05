@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions for AI coding agents working in this repository (WDCable / WiFi Direct Cable).
+Instructions for AI coding agents working in this repository (Kabelos).
 
 This file is the single source of truth for agent behavior in this repo. It is written for code
 agents, so it is specific about where code lives, what commands to use, and which behaviors are
@@ -8,10 +8,10 @@ forbidden. If a statement here conflicts with a generic instruction, this file w
 
 ## Project Overview
 
-WiFi Direct Cable (WDCable) is an offline, peer-to-peer transfer app: file transfer, chat, speed
+Kabelos is an offline, peer-to-peer transfer app: file transfer, chat, speed
 tests, and audio streaming over Wi-Fi Direct. No internet, router, or hotspot is required.
 
-- This repository contains the **Flutter Android client** only (version 2.0.1, Protocol v2).
+- This repository contains the **Flutter Android client** only (version 3.0.0, Protocol v2).
 - A separate Windows companion client lives in the [WDCableWUI](https://github.com/jingcjie/WDCableWUI)
   repository. Do **not** port Windows concepts (e.g. `WiFiDirectAdvertisementPublisher`) into this
   Android codebase.
@@ -25,7 +25,7 @@ Key entry points for agents:
   layer (permissions, state machine, scan/connect/disconnect rules, "Do Not Do" list). **Read this
   before touching anything related to Wi-Fi Direct connectivity.**
 - `README.md` — product overview, screenshots, troubleshooting, user-facing features.
-- `RELEASING.md` — the exact release process (version codes, signing, tags, IzzyOnDroid).
+- `RELEASING.md` — the exact release process (version codes, signing, tags).
 - `.github/workflows/android-release.yml` — CI build configuration (pin the exact Flutter/NDK/SDK
   versions listed there when working on the build).
 
@@ -94,7 +94,7 @@ git diff
 ```
 
 Commit style in this repo is short, lowercase summaries (e.g. `readme`, `ui fix`, `v5`,
-`Prepare WDCable 2.0.1 release`). Follow the existing style; do not invent a new convention.
+`Prepare Kabelos 3.0.0 release`). Follow the existing style; do not invent a new convention.
 Only commit, tag, or push when explicitly asked.
 
 ## Technologies
@@ -138,7 +138,7 @@ lib/
   l10n/                            # ARB sources + generated AppLocalizations
 
 android/app/src/main/
-  kotlin/com/jingcjie/wifi_direct_cable/
+  kotlin/com/involvex/kabelos/
     MainActivity.kt
     FlutterMethodChannelHandler.kt # all MethodChannel methods dispatched here
     WiFiDirectManager.kt           # native owner of Wi-Fi Direct lifecycle
@@ -209,8 +209,8 @@ android/app/src/main/
   transition is `WIFI_P2P_CONNECTION_CHANGED_ACTION` followed by `requestConnectionInfo()` with
   `groupFormed=true`.
 - Cleanup: `cancelConnect()` for a pending negotiation; `removeGroup()` only for a real/stale group.
-- Android components: `applicationId`/namespace is `com.jingcjie.wifi_direct_cable`. Kotlin files
-  live under `kotlin/com/jingcjie/wifi_direct_cable/` (not `com/example/...`).
+- Android components: `applicationId`/namespace is `com.involvex.kabelos`. Kotlin files
+  live under `kotlin/com/involvex/kabelos/` (not `com/example/...`).
 
 ### Native C++ / libopus
 
@@ -237,7 +237,7 @@ android/app/src/main/
 ### Building and releasing
 
 - Follow `RELEASING.md` exactly for releases. Highlights:
-  - Version format `X.Y.Z+BUILD` in `pubspec.yaml`; `--split-per-abi` adds ABI offsets (e.g. 2.0.1
+  - Version format `X.Y.Z+BUILD` in `pubspec.yaml`; `--split-per-abi` adds ABI offsets (e.g. 3.0.0
     → `4001` arm64, `6001` x86_64). Keep matching Fastlane changelogs in
     `fastlane/metadata/android/en-US/changelogs/`.
   - Build only `--target-platform android-arm64,android-x64`. Never upload an `armeabi-v7a` APK.
