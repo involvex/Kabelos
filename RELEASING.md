@@ -12,8 +12,8 @@ version: 3.0.0+3001
 Flutter adds ABI-specific offsets when `--split-per-abi` is used. The resulting
 3.0.0 APK version codes are:
 
-- `arm64-v8a`: `4001`
-- `x86_64`: `6001`
+- `arm64-v8a`: `5001`
+- `x86_64`: `7001`
 
 Keep Fastlane changelogs for those generated version codes in
 `fastlane/metadata/android/en-US/changelogs/`.

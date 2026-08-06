@@ -142,7 +142,7 @@ function Get-Changelog {
         return "No changelog available."
     }
 
-    $fastlaneCode = $VersionCode + 1000
+    $fastlaneCode = $VersionCode + 2000
     $changelogPath = "fastlane/metadata/android/en-US/changelogs/$fastlaneCode.txt"
     $changelogFolder = Split-Path -Parent $changelogPath
     if (-not (Test-Path $changelogFolder)) {
@@ -276,8 +276,8 @@ if ($pubspec -notmatch 'version:\s*(\d+\.\d+\.\d+)\+(\d+)') {
 }
 $VersionName = $Matches[1]
 $VersionCode = [int]$Matches[2]
-$ArmCode = $VersionCode + 1000
-$X64Code = $VersionCode + 3000
+$ArmCode = $VersionCode + 2000
+$X64Code = $VersionCode + 4000
 
 $Tag = if ($TagName) { $TagName } else { "v$VersionName" }
 $ReleaseTitle = "Kabelos $VersionName"
@@ -529,7 +529,7 @@ Write-Host ""
 Write-Host ("  Keystore  : $StoreFileRel") -ForegroundColor Yellow
 Write-Host ("  Hashes    : $ApkOutputDir\SHA256SUMS.txt") -ForegroundColor Yellow
 
-$clPath = "fastlane/metadata/android/en-US/changelogs/$($VersionCode + 1000).txt"
+$clPath = "fastlane/metadata/android/en-US/changelogs/$($VersionCode + 2000).txt"
 if (Test-Path $clPath) {
     Write-Host ("  Changelog : $clPath") -ForegroundColor Yellow
 }

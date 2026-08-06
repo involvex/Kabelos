@@ -77,6 +77,12 @@ android {
         includeInBundle = false
     }
 
+    packaging {
+        jniLibs {
+            excludes += setOf("**/armeabi-v7a/**")
+        }
+    }
+
     signingConfigs {
         if (hasReleaseSigningConfig) {
             create("release") {
