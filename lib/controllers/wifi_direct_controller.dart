@@ -706,9 +706,11 @@ class WiFiDirectController {
 
   Future<void> _initializeState() async {
     try {
-      await loadAudioLatencyMode();
-      await loadAudioQualityMode();
-      await loadReceiveDestination();
+      await Future.wait([
+        loadAudioLatencyMode(),
+        loadAudioQualityMode(),
+        loadReceiveDestination(),
+      ]);
       final isEnabled = await _service.isWifiP2pEnabled();
       _updateState(_currentState.copyWith(isWifiP2pEnabled: isEnabled));
       final discoveryStatus = await _service.getDiscoveryStatus();
@@ -1529,6 +1531,13 @@ class WiFiDirectController {
     final existing = _currentState.activeFileTransfers[event.transferId];
     if (existing == null || existing.isTerminal) return;
     if (existing.status == FileTransferStatus.cancelling) return;
+
+    // Skip if bytesTransferred hasn't changed - avoids redundant state updates
+    // and rebuilds on duplicate/no-op progress events
+    if (existing.bytesTransferred == event.bytesTransferred &&
+        existing.progress == event.progress) {
+      return;
+    }
 
     _putActiveTransfer(
       existing.copyWith(

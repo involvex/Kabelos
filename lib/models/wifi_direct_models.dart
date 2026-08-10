@@ -932,4 +932,141 @@ class WiFiDirectState {
   bool get isAudioActive => audioState != 'idle';
 
   bool get isAudioStreaming => audioState == 'streaming';
+
+  // ---------------------------------------------------------------------------
+  // Field-selective equality helpers — used by StateBuilder to decide whether a
+  // tab should rebuild.  Each method compares only the fields that the
+  // corresponding tab cares about, so unrelated state changes (e.g. logs) do
+  // not trigger unnecessary rebuilds.
+  // ---------------------------------------------------------------------------
+
+  bool _listEquals<T>(List<T>? a, List<T>? b) {
+    if (identical(a, b)) return true;
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  bool _mapEquals<K, V>(Map<K, V>? a, Map<K, V>? b) {
+    if (identical(a, b)) return true;
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+    for (final key in a.keys) {
+      if (!b.containsKey(key) || b[key] != a[key]) return false;
+    }
+    return true;
+  }
+
+  bool connectionFieldsDiffer(WiFiDirectState other) {
+    return isWifiP2pEnabled != other.isWifiP2pEnabled ||
+        nativeWifiDirectState != other.nativeWifiDirectState ||
+        isDiscovering != other.isDiscovering ||
+        discoveryState != other.discoveryState ||
+        isListening != other.isListening ||
+        listenState != other.listenState ||
+        isServiceRegistered != other.isServiceRegistered ||
+        isConnecting != other.isConnecting ||
+        pendingPeerAddress != other.pendingPeerAddress ||
+        isServerStarted != other.isServerStarted ||
+        !_mapEquals(connectionInfo?.toMap(), other.connectionInfo?.toMap()) ||
+        sessionState != other.sessionState ||
+        sessionId != other.sessionId ||
+        sessionRole != other.sessionRole ||
+        disconnectReason != other.disconnectReason ||
+        lastNativeError != other.lastNativeError ||
+        !_listEquals(
+          peers.map((p) => p.toMap()).toList(),
+          other.peers.map((p) => p.toMap()).toList(),
+        ) ||
+        isForegroundServiceRunning != other.isForegroundServiceRunning ||
+        isWifiLockHeld != other.isWifiLockHeld ||
+        isWakeLockHeld != other.isWakeLockHeld ||
+        peerCapabilities.toString() != other.peerCapabilities.toString();
+  }
+
+  bool fileTransferFieldsDiffer(WiFiDirectState other) {
+    return !_mapEquals(
+          activeFileTransfers.map((k, v) => MapEntry(k, v.toMap())),
+          other.activeFileTransfers.map((k, v) => MapEntry(k, v.toMap())),
+        ) ||
+        !_listEquals(
+          recentFileTransfers.map((t) => t.toMap()).toList(),
+          other.recentFileTransfers.map((t) => t.toMap()).toList(),
+        ) ||
+        receiveDestination.mode != other.receiveDestination.mode ||
+        receiveDestination.displayName !=
+            other.receiveDestination.displayName ||
+        receiveDestination.uri != other.receiveDestination.uri ||
+        sessionState != other.sessionState;
+  }
+
+  bool chatFieldsDiffer(WiFiDirectState other) {
+    return !_listEquals(
+          chatMessages.map((m) => m.toMap()).toList(),
+          other.chatMessages.map((m) => m.toMap()).toList(),
+        ) ||
+        sessionState != other.sessionState ||
+        !_mapEquals(connectionInfo?.toMap(), other.connectionInfo?.toMap());
+  }
+
+  bool speedTestFieldsDiffer(WiFiDirectState other) {
+    return !_listEquals(
+          speedTestResults.map((s) => s.toMap()).toList(),
+          other.speedTestResults.map((s) => s.toMap()).toList(),
+        ) ||
+        (lastSpeedTest == null) != (other.lastSpeedTest == null) ||
+        (lastSpeedTest?.toMap().toString() !=
+            other.lastSpeedTest?.toMap().toString()) ||
+        isSpeedTesting != other.isSpeedTesting ||
+        sessionState != other.sessionState;
+  }
+
+  bool audioFieldsDiffer(WiFiDirectState other) {
+    if (audioMode != other.audioMode ||
+        audioState != other.audioState ||
+        audioSource != other.audioSource ||
+        audioEncoding != other.audioEncoding ||
+        audioLatencyMode != other.audioLatencyMode ||
+        audioQualityMode != other.audioQualityMode ||
+        audioPeerReady != other.audioPeerReady ||
+        audioStreamId != other.audioStreamId ||
+        audioLastError != other.audioLastError ||
+        sessionState != other.sessionState) {
+      return true;
+    }
+    // Compare AudioLinkStats key fields (no == operator defined)
+    if (audioStats.bitrateBps != other.audioStats.bitrateBps ||
+        audioStats.framesSent != other.audioStats.framesSent ||
+        audioStats.framesReceived != other.audioStats.framesReceived ||
+        audioStats.droppedFrames != other.audioStats.droppedFrames ||
+        audioStats.packetLossCount != other.audioStats.packetLossCount ||
+        audioStats.bufferLevelMs != other.audioStats.bufferLevelMs ||
+        audioStats.latencyMs != other.audioStats.latencyMs) {
+      return true;
+    }
+    // Compare AudioSupportInfo key fields
+    if (audioSupport.audioLinkSupported !=
+            other.audioSupport.audioLinkSupported ||
+        audioSupport.canSend != other.audioSupport.canSend ||
+        audioSupport.canReceive != other.audioSupport.canReceive ||
+        audioSupport.bitrateBps != other.audioSupport.bitrateBps) {
+      return true;
+    }
+    // Compare peerCapabilities
+    if (!_listEquals(peerCapabilities, other.peerCapabilities)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool settingsFieldsDiffer(WiFiDirectState other) {
+    return isForegroundServiceRunning != other.isForegroundServiceRunning ||
+        showPhotosTab != other.showPhotosTab ||
+        showChatTab != other.showChatTab ||
+        showAudioTab != other.showAudioTab ||
+        showSpeedTestTab != other.showSpeedTestTab;
+  }
 }

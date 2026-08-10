@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../controllers/wifi_direct_controller.dart';
 import '../l10n/app_localizations.dart';
 import '../models/wifi_direct_models.dart';
+import 'state_builder.dart';
 
 class AudioTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
 
-  const AudioTab({super.key, required this.controller, required this.state});
+  const AudioTab({super.key, required this.controller});
 
   @override
   State<AudioTab> createState() => _AudioTabState();
@@ -22,11 +22,6 @@ class _AudioTabState extends State<AudioTab> {
   @override
   void initState() {
     super.initState();
-    _mode = widget.state.audioMode == 'send' ? 'send' : 'receive';
-    _latencyMode = widget.state.audioLatencyMode == 'stable'
-        ? 'stable'
-        : 'lowLatency';
-    _qualityMode = _normalizeQualityMode(widget.state.audioQualityMode);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.controller.loadAudioSupport();
       widget.controller.loadAudioLatencyMode();
@@ -35,65 +30,52 @@ class _AudioTabState extends State<AudioTab> {
   }
 
   @override
-  void didUpdateWidget(covariant AudioTab oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.state.audioMode != widget.state.audioMode &&
-        widget.state.audioMode != 'idle') {
-      _mode = widget.state.audioMode;
-    }
-    if (oldWidget.state.audioLatencyMode != widget.state.audioLatencyMode) {
-      _latencyMode = widget.state.audioLatencyMode == 'stable'
-          ? 'stable'
-          : 'lowLatency';
-    }
-    if (oldWidget.state.audioQualityMode != widget.state.audioQualityMode) {
-      _qualityMode = _normalizeQualityMode(widget.state.audioQualityMode);
-    }
-    if (!oldWidget.state.isSessionReady && widget.state.isSessionReady) {
-      widget.controller.loadAudioSupport();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isReady = widget.state.isSessionReady;
-    final peerSupported = widget.state.peerSupportsAudio;
-    final support = widget.state.audioSupport;
-    final isActive = widget.state.isAudioActive;
-    final canStart =
-        isReady &&
-        peerSupported &&
-        !isActive &&
-        (_mode == 'send' ? support.canSend : support.canReceive);
+    return StateBuilder(
+      controller: widget.controller,
+      shouldRebuild: (prev, curr) {
+        if (!prev.isSessionReady && curr.isSessionReady) {
+          widget.controller.loadAudioSupport();
+        }
+        return curr.audioFieldsDiffer(prev);
+      },
+      builder: (context, s) {
+        // Sync internal UI state with external state
+        if (s.audioMode != 'idle') {
+          _mode = s.audioMode;
+        }
+        _latencyMode = s.audioLatencyMode == 'stable' ? 'stable' : 'lowLatency';
+        _qualityMode = _normalizeQualityMode(s.audioQualityMode);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildStatus(context, isReady, peerSupported, support),
-          const SizedBox(height: 16),
-          _buildControls(context, canStart, isActive),
-          const SizedBox(height: 16),
-          _buildStats(context),
-        ],
-      ),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildStatus(context, s),
+              const SizedBox(height: 16),
+              _buildControls(context, s),
+              const SizedBox(height: 16),
+              _buildStats(context, s),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildStatus(
-    BuildContext context,
-    bool isReady,
-    bool peerSupported,
-    AudioSupportInfo support,
-  ) {
-    final color = widget.state.isAudioStreaming
+  Widget _buildStatus(BuildContext context, WiFiDirectState s) {
+    final isReady = s.isSessionReady;
+    final peerSupported = s.peerSupportsAudio;
+    final support = s.audioSupport;
+
+    final color = s.isAudioStreaming
         ? Colors.green
         : isReady && peerSupported && support.audioLinkSupported
         ? Theme.of(context).colorScheme.primary
         : Colors.orange;
     final message =
-        widget.state.audioLastError ??
+        s.audioLastError ??
         (!isReady
             ? AppLocalizations.of(context)!.audioConnectToPeerFirst
             : !peerSupported
@@ -113,7 +95,7 @@ class _AudioTabState extends State<AudioTab> {
       child: Row(
         children: [
           Icon(
-            widget.state.isAudioStreaming ? Icons.graphic_eq : Icons.mic,
+            s.isAudioStreaming ? Icons.graphic_eq : Icons.mic,
             color: color,
             size: 26,
           ),
@@ -144,8 +126,17 @@ class _AudioTabState extends State<AudioTab> {
     );
   }
 
-  Widget _buildControls(BuildContext context, bool canStart, bool isActive) {
-    final isSendMode = _mode == 'send';
+  Widget _buildControls(BuildContext context, WiFiDirectState s) {
+    final isReady = s.isSessionReady;
+    final peerSupported = s.peerSupportsAudio;
+    final support = s.audioSupport;
+    final isActive = s.isAudioActive;
+    final canStart =
+        isReady &&
+        peerSupported &&
+        !isActive &&
+        (_mode == 'send' ? support.canSend : support.canReceive);
+
     return Card(
       elevation: 2,
       child: Padding(
@@ -182,7 +173,7 @@ class _AudioTabState extends State<AudioTab> {
                       });
                     },
             ),
-            if (isSendMode) ...[
+            if (_mode == 'send') ...[
               const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.audioLatencyMode,
@@ -216,7 +207,7 @@ class _AudioTabState extends State<AudioTab> {
                       },
               ),
             ],
-            if (isSendMode) ...[
+            if (_mode == 'send') ...[
               const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.audioQualityMode,
@@ -295,15 +286,15 @@ class _AudioTabState extends State<AudioTab> {
               context,
               icon: Icons.settings_voice,
               title: AppLocalizations.of(context)!.audioEncoding,
-              value: !isSendMode && !widget.state.isAudioStreaming
+              value: !(_mode == 'send') && !s.isAudioStreaming
                   ? AppLocalizations.of(context)!.audioOpus
                   : _formatOpusQuality(
-                      isSendMode
-                          ? _qualityBitrate(_qualityMode)
-                          : widget.state.audioStats.configuredBitrateBps,
+                      _mode == 'send'
+                          ? _qualityBitrate(_qualityMode, s)
+                          : s.audioStats.configuredBitrateBps,
                     ),
               trailing: Text(
-                isSendMode
+                _mode == 'send'
                     ? AppLocalizations.of(context)!.audioOnlyOption
                     : AppLocalizations.of(context)!.audioFollowSenderSide,
               ),
@@ -317,8 +308,8 @@ class _AudioTabState extends State<AudioTab> {
                     : canStart
                     ? () => widget.controller.startAudio(
                         mode: _mode,
-                        latencyMode: isSendMode ? _latencyMode : null,
-                        qualityMode: isSendMode ? _qualityMode : null,
+                        latencyMode: _mode == 'send' ? _latencyMode : null,
+                        qualityMode: _mode == 'send' ? _qualityMode : null,
                       )
                     : null,
                 icon: Icon(isActive ? Icons.stop : Icons.play_arrow),
@@ -378,8 +369,8 @@ class _AudioTabState extends State<AudioTab> {
     );
   }
 
-  Widget _buildStats(BuildContext context) {
-    final stats = widget.state.audioStats;
+  Widget _buildStats(BuildContext context, WiFiDirectState s) {
+    final stats = s.audioStats;
     return Card(
       elevation: 2,
       child: Padding(
@@ -410,7 +401,7 @@ class _AudioTabState extends State<AudioTab> {
               children: [
                 _buildStatTile(
                   AppLocalizations.of(context)!.audioState,
-                  _formatState(widget.state.audioState),
+                  _formatState(s.audioState),
                 ),
                 _buildStatTile(
                   AppLocalizations.of(context)!.audioLatency,
@@ -557,8 +548,8 @@ class _AudioTabState extends State<AudioTab> {
         : 'standard';
   }
 
-  int _qualityBitrate(String qualityMode) {
-    return widget.state.audioSupport.qualityModes
+  int _qualityBitrate(String qualityMode, WiFiDirectState s) {
+    return s.audioSupport.qualityModes
         .firstWhere(
           (item) => item.qualityMode == qualityMode,
           orElse: () => defaultAudioQualityModes.firstWhere(

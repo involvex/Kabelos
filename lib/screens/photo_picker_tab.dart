@@ -4,18 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:kabelos/controllers/wifi_direct_controller.dart';
-import 'package:kabelos/models/wifi_direct_models.dart';
 import 'package:kabelos/l10n/app_localizations.dart';
 
 class PhotoPickerTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
 
-  const PhotoPickerTab({
-    super.key,
-    required this.controller,
-    required this.state,
-  });
+  const PhotoPickerTab({super.key, required this.controller});
 
   @override
   State<PhotoPickerTab> createState() => _PhotoPickerTabState();

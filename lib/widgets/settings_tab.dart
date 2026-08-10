@@ -6,16 +6,15 @@ import '../controllers/wifi_direct_controller.dart';
 import '../models/wifi_direct_models.dart';
 import '../theme/theme_provider.dart';
 import '../providers/language_provider.dart';
+import 'state_builder.dart';
 
 class SettingsTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
   final VoidCallback onTabsVisibilityChanged;
 
   const SettingsTab({
     super.key,
     required this.controller,
-    required this.state,
     required this.onTabsVisibilityChanged,
   });
 
@@ -26,8 +25,15 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   @override
   Widget build(BuildContext context) {
+    return StateBuilder(
+      controller: widget.controller,
+      shouldRebuild: (prev, curr) => curr.settingsFieldsDiffer(prev),
+      builder: (context, s) => _buildContent(context, s),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, WiFiDirectState s) {
     final l10n = AppLocalizations.of(context)!;
-    final s = widget.state;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),

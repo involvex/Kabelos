@@ -5,16 +5,12 @@ import '../l10n/app_localizations.dart';
 import '../models/wifi_direct_models.dart';
 import '../controllers/wifi_direct_controller.dart';
 import '../wifi_direct_service.dart';
+import 'state_builder.dart';
 
 class SpeedTestTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
 
-  const SpeedTestTab({
-    super.key,
-    required this.controller,
-    required this.state,
-  });
+  const SpeedTestTab({super.key, required this.controller});
 
   @override
   State<SpeedTestTab> createState() => _SpeedTestTabState();
@@ -77,9 +73,6 @@ class _SpeedTestTabState extends State<SpeedTestTab>
     if (oldWidget.controller != widget.controller) {
       _eventSubscription?.cancel();
       _setupProgressListener();
-    }
-    if (oldWidget.state.isSpeedTesting && !widget.state.isSpeedTesting) {
-      _resetRunningTestUi();
     }
   }
 
@@ -193,9 +186,8 @@ class _SpeedTestTabState extends State<SpeedTestTab>
   }
 
   void _startSpeedTest() async {
-    if (!_isTestRunning &&
-        !widget.state.isSpeedTesting &&
-        widget.state.isSessionReady) {
+    final s = widget.controller.currentState;
+    if (!_isTestRunning && !s.isSpeedTesting && s.isSessionReady) {
       setState(() {
         _isTestRunning = true;
         _downloadProgress = 0.0;
@@ -236,30 +228,39 @@ class _SpeedTestTabState extends State<SpeedTestTab>
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Connection Status
-          _buildConnectionStatus(context),
-          const SizedBox(height: 24),
-          // Speed Test Controls
-          Center(child: _buildSpeedTestControls(context)),
-          const SizedBox(height: 24),
-          // Current Test Results
-          _buildCurrentResults(context),
-          const SizedBox(height: 24),
-          // Historical Results
-          _buildHistoricalResults(context),
-          const SizedBox(height: 24),
-        ],
+    return StateBuilder(
+      controller: widget.controller,
+      shouldRebuild: (prev, curr) {
+        if (prev.isSpeedTesting && !curr.isSpeedTesting) {
+          _resetRunningTestUi();
+        }
+        return curr.speedTestFieldsDiffer(prev);
+      },
+      builder: (context, s) => SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Connection Status
+            _buildConnectionStatus(context, s),
+            const SizedBox(height: 24),
+            // Speed Test Controls
+            Center(child: _buildSpeedTestControls(context, s)),
+            const SizedBox(height: 24),
+            // Current Test Results
+            _buildCurrentResults(context, s),
+            const SizedBox(height: 24),
+            // Historical Results
+            _buildHistoricalResults(context, s),
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildConnectionStatus(BuildContext context) {
-    final isConnected = widget.state.isSessionReady;
+  Widget _buildConnectionStatus(BuildContext context, WiFiDirectState s) {
+    final isConnected = s.isSessionReady;
 
     return Container(
       width: double.infinity,
@@ -310,9 +311,9 @@ class _SpeedTestTabState extends State<SpeedTestTab>
     );
   }
 
-  Widget _buildSpeedTestControls(BuildContext context) {
-    final isConnected = widget.state.isSessionReady;
-    final isTestRunning = _isTestRunning || widget.state.isSpeedTesting;
+  Widget _buildSpeedTestControls(BuildContext context, WiFiDirectState s) {
+    final isConnected = s.isSessionReady;
+    final isTestRunning = _isTestRunning || s.isSpeedTesting;
 
     return Card(
       elevation: 2,
@@ -411,9 +412,9 @@ class _SpeedTestTabState extends State<SpeedTestTab>
     );
   }
 
-  Widget _buildCurrentResults(BuildContext context) {
-    final lastResult = widget.state.speedTestResults.isNotEmpty
-        ? widget.state.speedTestResults.last
+  Widget _buildCurrentResults(BuildContext context, WiFiDirectState s) {
+    final lastResult = s.speedTestResults.isNotEmpty
+        ? s.speedTestResults.last
         : null;
 
     return Card(
@@ -558,7 +559,7 @@ class _SpeedTestTabState extends State<SpeedTestTab>
     );
   }
 
-  Widget _buildHistoricalResults(BuildContext context) {
+  Widget _buildHistoricalResults(BuildContext context, WiFiDirectState s) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -580,13 +581,13 @@ class _SpeedTestTabState extends State<SpeedTestTab>
                 Text(
                   AppLocalizations.of(
                     context,
-                  )!.tests(widget.state.speedTestResults.length),
+                  )!.tests(s.speedTestResults.length),
                   style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            if (widget.state.speedTestResults.isEmpty) ...[
+            if (s.speedTestResults.isEmpty) ...[
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
@@ -609,13 +610,10 @@ class _SpeedTestTabState extends State<SpeedTestTab>
               SizedBox(
                 height: 200,
                 child: ListView.builder(
-                  itemCount: widget.state.speedTestResults.length,
+                  itemCount: s.speedTestResults.length,
                   itemBuilder: (context, index) {
                     final result =
-                        widget.state.speedTestResults[widget
-                                .state
-                                .speedTestResults
-                                .length -
+                        s.speedTestResults[s.speedTestResults.length -
                             1 -
                             index];
                     return ListTile(

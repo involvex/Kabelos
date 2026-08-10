@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
-import '../models/wifi_direct_models.dart';
 import '../controllers/wifi_direct_controller.dart';
+import '../models/wifi_direct_models.dart';
+import 'state_builder.dart';
 
 class ChatTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
 
-  const ChatTab({super.key, required this.controller, required this.state});
+  const ChatTab({super.key, required this.controller});
 
   @override
   State<ChatTab> createState() => _ChatTabState();
@@ -47,20 +47,21 @@ class _ChatTabState extends State<ChatTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Connection Status Banner
-        _buildConnectionBanner(context),
-        // Chat Messages
-        Expanded(child: _buildChatMessages(context)),
-        // Message Input
-        _buildMessageInput(context),
-      ],
+    return StateBuilder(
+      controller: widget.controller,
+      shouldRebuild: (prev, curr) => curr.chatFieldsDiffer(prev),
+      builder: (context, s) => Column(
+        children: [
+          _buildConnectionBanner(context, s),
+          Expanded(child: _buildChatMessages(context, s)),
+          _buildMessageInput(context, s),
+        ],
+      ),
     );
   }
 
-  Widget _buildConnectionBanner(BuildContext context) {
-    final isConnected = widget.state.isSessionReady;
+  Widget _buildConnectionBanner(BuildContext context, WiFiDirectState s) {
+    final isConnected = s.isSessionReady;
 
     return Container(
       width: double.infinity,
@@ -96,7 +97,7 @@ class _ChatTabState extends State<ChatTab> {
               ),
             ),
           ),
-          if (isConnected && widget.state.connectionInfo != null) ...[
+          if (isConnected && s.connectionInfo != null) ...[
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -105,7 +106,7 @@ class _ChatTabState extends State<ChatTab> {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                widget.state.connectionInfo!.isGroupOwner
+                s.connectionInfo!.isGroupOwner
                     ? AppLocalizations.of(context)!.host
                     : AppLocalizations.of(context)!.client,
                 style: const TextStyle(
@@ -121,8 +122,8 @@ class _ChatTabState extends State<ChatTab> {
     );
   }
 
-  Widget _buildChatMessages(BuildContext context) {
-    if (widget.state.chatMessages.isEmpty) {
+  Widget _buildChatMessages(BuildContext context, WiFiDirectState s) {
+    if (s.chatMessages.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -152,9 +153,9 @@ class _ChatTabState extends State<ChatTab> {
       child: ListView.builder(
         controller: _scrollController,
         padding: const EdgeInsets.all(16),
-        itemCount: widget.state.chatMessages.length,
+        itemCount: s.chatMessages.length,
         itemBuilder: (context, index) {
-          final message = widget.state.chatMessages[index];
+          final message = s.chatMessages[index];
           return _buildMessageBubble(context, message);
         },
       ),
@@ -231,8 +232,8 @@ class _ChatTabState extends State<ChatTab> {
     );
   }
 
-  Widget _buildMessageInput(BuildContext context) {
-    final isConnected = widget.state.isSessionReady;
+  Widget _buildMessageInput(BuildContext context, WiFiDirectState s) {
+    final isConnected = s.isSessionReady;
 
     return Container(
       padding: const EdgeInsets.all(16),

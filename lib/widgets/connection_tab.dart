@@ -7,19 +7,59 @@ import '../utils/error_messages.dart';
 import '../screens/setup_check_screen.dart';
 import '../screens/device_info_screen.dart';
 import '../screens/qr_pairing_screen.dart';
+import 'state_builder.dart';
 
-class ConnectionTab extends StatelessWidget {
+class ConnectionTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
 
-  const ConnectionTab({
-    super.key,
-    required this.controller,
-    required this.state,
-  });
+  const ConnectionTab({super.key, required this.controller});
+
+  @override
+  State<ConnectionTab> createState() => _ConnectionTabState();
+}
+
+class _ConnectionTabState extends State<ConnectionTab> {
+  late WiFiDirectState _state;
+  final ScrollController _logScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _state = widget.controller.currentState;
+  }
 
   @override
   Widget build(BuildContext context) {
+    return StateBuilder(
+      controller: widget.controller,
+      shouldRebuild: (prev, curr) => prev.connectionFieldsDiffer(curr),
+      builder: (context, state) {
+        _state = state;
+        _scrollToLogsBottom();
+        return _buildContent(context);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _logScrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToLogsBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_logScrollController.hasClients && _state.logs.isNotEmpty) {
+        _logScrollController.animateTo(
+          _logScrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Widget _buildContent(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -42,19 +82,19 @@ class ConnectionTab extends StatelessWidget {
 
   Widget _buildWifiP2pStatus(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final statusText = !state.isWifiP2pEnabled
+    final statusText = !_state.isWifiP2pEnabled
         ? l10n.connectionStatusWifiOff
-        : state.isDiscovering
+        : _state.isDiscovering
         ? l10n.scanning
-        : state.isForegroundServiceRunning || state.isServiceRegistered
+        : _state.isForegroundServiceRunning || _state.isServiceRegistered
         ? l10n.readyForConnections
-        : state.nativeWifiDirectState;
+        : _state.nativeWifiDirectState;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: state.isWifiP2pEnabled
+        color: _state.isWifiP2pEnabled
             ? Colors.green.withValues(alpha: 0.1)
             : Colors.red.withValues(alpha: 0.1),
         border: Border(
@@ -67,8 +107,8 @@ class ConnectionTab extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            state.isWifiP2pEnabled ? Icons.wifi : Icons.wifi_off,
-            color: state.isWifiP2pEnabled ? Colors.green : Colors.red,
+            _state.isWifiP2pEnabled ? Icons.wifi : Icons.wifi_off,
+            color: _state.isWifiP2pEnabled ? Colors.green : Colors.red,
             size: 24,
           ),
           const SizedBox(width: 12),
@@ -85,18 +125,18 @@ class ConnectionTab extends StatelessWidget {
                 Text(
                   statusText,
                   style: TextStyle(
-                    color: state.isWifiP2pEnabled ? Colors.green : Colors.red,
+                    color: _state.isWifiP2pEnabled ? Colors.green : Colors.red,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                if (state.lastNativeError != null)
+                if (_state.lastNativeError != null)
                   Text(
                     ErrorMessages.localizeTitle(
                           context,
-                          state.lastNativeError!,
+                          _state.lastNativeError!,
                         ) ??
-                        state.lastNativeError!,
+                        _state.lastNativeError!,
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 12,
@@ -112,15 +152,15 @@ class ConnectionTab extends StatelessWidget {
   }
 
   Widget _buildConnectionStatus(BuildContext context) {
-    final hasWifiDirectLink = state.hasWifiDirectLink;
+    final hasWifiDirectLink = _state.hasWifiDirectLink;
     final l10n = AppLocalizations.of(context)!;
     final localizedSessionState = ErrorMessages.localizeSessionState(
       context,
-      state.sessionState,
+      _state.sessionState,
     );
     final statusText = hasWifiDirectLink
         ? '${l10n.connected} / $localizedSessionState'
-        : state.isConnecting
+        : _state.isConnecting
         ? 'Connecting to ${_pendingPeerLabel()}'
         : l10n.disconnected;
 
@@ -138,8 +178,8 @@ class ConnectionTab extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            state.isSessionReady ? Icons.link : Icons.link_off,
-            color: state.isSessionReady ? Colors.green : Colors.red,
+            _state.isSessionReady ? Icons.link : Icons.link_off,
+            color: _state.isSessionReady ? Colors.green : Colors.red,
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -159,7 +199,7 @@ class ConnectionTab extends StatelessWidget {
     final errorMessages = <({String title, String body})>[];
     final l10n = AppLocalizations.of(context)!;
 
-    final disconnectReason = state.disconnectReason;
+    final disconnectReason = _state.disconnectReason;
     if (disconnectReason != null && disconnectReason.isNotEmpty) {
       final title = ErrorMessages.localizeTitle(context, disconnectReason);
       final body = ErrorMessages.localizeBody(context, disconnectReason);
@@ -168,7 +208,7 @@ class ConnectionTab extends StatelessWidget {
       }
     }
 
-    final lastNativeError = state.lastNativeError;
+    final lastNativeError = _state.lastNativeError;
     if (lastNativeError != null && lastNativeError.isNotEmpty) {
       final title = ErrorMessages.localizeTitle(context, lastNativeError);
       final body = ErrorMessages.localizeBody(context, lastNativeError);
@@ -177,7 +217,7 @@ class ConnectionTab extends StatelessWidget {
       }
     }
 
-    if (state.sessionState == 'Failed') {
+    if (_state.sessionState == 'Failed') {
       final title = l10n.errorSessionFailedTitle;
       final body = l10n.errorSessionFailed;
       errorMessages.add((title: title, body: body));
@@ -254,10 +294,10 @@ class ConnectionTab extends StatelessWidget {
             children: [
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: state.isDiscovering
+                  onPressed: _state.isDiscovering
                       ? null
-                      : controller.discoverPeers,
-                  icon: state.isDiscovering
+                      : widget.controller.discoverPeers,
+                  icon: _state.isDiscovering
                       ? const SizedBox(
                           width: 16,
                           height: 16,
@@ -265,7 +305,7 @@ class ConnectionTab extends StatelessWidget {
                         )
                       : const Icon(Icons.search),
                   label: Text(
-                    state.isDiscovering
+                    _state.isDiscovering
                         ? AppLocalizations.of(context)!.scanning
                         : AppLocalizations.of(context)!.scanForDevices,
                   ),
@@ -277,7 +317,7 @@ class ConnectionTab extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: controller.stopDiscovery,
+                  onPressed: widget.controller.stopDiscovery,
                   icon: const Icon(Icons.stop),
                   label: Text(AppLocalizations.of(context)!.stopScan),
                   style: ElevatedButton.styleFrom(
@@ -296,8 +336,8 @@ class ConnectionTab extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => SetupCheckScreen(
-                          controller: controller,
-                          state: state,
+                          controller: widget.controller,
+                          state: _state,
                         ),
                       ),
                     );
@@ -318,8 +358,8 @@ class ConnectionTab extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => QrPairingScreen(
-                          controller: controller,
-                          state: state,
+                          controller: widget.controller,
+                          state: _state,
                         ),
                       ),
                     );
@@ -340,8 +380,8 @@ class ConnectionTab extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => DeviceInfoScreen(
-                          controller: controller,
-                          state: state,
+                          controller: widget.controller,
+                          state: _state,
                         ),
                       ),
                     );
@@ -363,7 +403,7 @@ class ConnectionTab extends StatelessWidget {
   }
 
   Widget _buildPeersList(BuildContext context) {
-    if (state.peers.isEmpty) {
+    if (_state.peers.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -408,7 +448,7 @@ class ConnectionTab extends StatelessWidget {
             child: Text(
               AppLocalizations.of(
                 context,
-              )!.availableDevices(state.peers.length),
+              )!.availableDevices(_state.peers.length),
               style: Theme.of(
                 context,
               ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -416,7 +456,7 @@ class ConnectionTab extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: state.peers.length,
+              itemCount: _state.peers.length,
               separatorBuilder: (context, index) => Divider(
                 height: 1,
                 color: Theme.of(
@@ -424,7 +464,7 @@ class ConnectionTab extends StatelessWidget {
                 ).colorScheme.outline.withValues(alpha: 0.2),
               ),
               itemBuilder: (context, index) {
-                final peer = state.peers[index];
+                final peer = _state.peers[index];
                 final action = _getPeerAction(context, peer);
                 return ListTile(
                   leading: CircleAvatar(
@@ -482,7 +522,7 @@ class ConnectionTab extends StatelessWidget {
                   ),
                   trailing: ElevatedButton(
                     onPressed: action.enabled
-                        ? () => controller.connectToPeer(peer)
+                        ? () => widget.controller.connectToPeer(peer)
                         : null,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -511,7 +551,7 @@ class ConnectionTab extends StatelessWidget {
 
   _PeerAction _getPeerAction(BuildContext context, WiFiDirectDevice peer) {
     final isPendingPeer =
-        state.isConnecting && state.pendingPeerAddress == peer.deviceAddress;
+        _state.isConnecting && _state.pendingPeerAddress == peer.deviceAddress;
     final isConnectedPeer = peer.status == 0;
     final isInvitedPeer = peer.status == 1;
 
@@ -527,7 +567,7 @@ class ConnectionTab extends StatelessWidget {
       return const _PeerAction('Invited', false);
     }
 
-    if (state.isConnecting || state.hasWifiDirectLink) {
+    if (_state.isConnecting || _state.hasWifiDirectLink) {
       return _PeerAction(AppLocalizations.of(context)!.connect, false);
     }
 
@@ -535,11 +575,11 @@ class ConnectionTab extends StatelessWidget {
   }
 
   String _pendingPeerLabel() {
-    final pendingAddress = state.pendingPeerAddress;
+    final pendingAddress = _state.pendingPeerAddress;
     if (pendingAddress == null || pendingAddress.isEmpty) {
       return 'peer';
     }
-    for (final peer in state.peers) {
+    for (final peer in _state.peers) {
       if (peer.deviceAddress == pendingAddress && peer.deviceName.isNotEmpty) {
         return peer.deviceName;
       }
@@ -592,22 +632,26 @@ class ConnectionTab extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: state.logs.isEmpty
+            child: _state.logs.isEmpty
                 ? Center(
                     child: Text(
                       AppLocalizations.of(context)!.noLogsYet,
                       style: TextStyle(color: Colors.grey),
                     ),
                   )
-                : SingleChildScrollView(
+                : ListView.builder(
+                    controller: _logScrollController,
                     padding: const EdgeInsets.all(8),
-                    child: SelectableText(
-                      state.logs.join('\n'),
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
+                    itemCount: _state.logs.length,
+                    itemBuilder: (context, index) {
+                      return SelectableText(
+                        _state.logs[index],
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontFamily: 'monospace',
+                        ),
+                      );
+                    },
                   ),
           ),
         ],
@@ -618,7 +662,7 @@ class ConnectionTab extends StatelessWidget {
   Future<void> _copyDiagnostics(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     try {
-      final logs = await controller.getDiagnosticLogs();
+      final logs = await widget.controller.getDiagnosticLogs();
       await Clipboard.setData(ClipboardData(text: logs));
       messenger.showSnackBar(
         const SnackBar(content: Text('Diagnostics copied')),

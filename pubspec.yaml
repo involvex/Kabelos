@@ -29,6 +29,9 @@ dependencies:
   # Kabelos: friendly permission prompts (Android 13+ NEARBY_WIFI_DEVICES, etc.)
   permission_handler: ^11.3.1
 
+  # Kabelos: fast Dart-side preference caching
+  shared_preferences: ^2.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

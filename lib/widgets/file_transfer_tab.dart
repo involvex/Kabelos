@@ -5,16 +5,12 @@ import '../l10n/app_localizations.dart';
 import '../controllers/wifi_direct_controller.dart';
 import '../models/wifi_direct_models.dart';
 import '../wifi_direct_service.dart';
+import 'state_builder.dart';
 
 class FileTransferTab extends StatefulWidget {
   final WiFiDirectController controller;
-  final WiFiDirectState state;
 
-  const FileTransferTab({
-    super.key,
-    required this.controller,
-    required this.state,
-  });
+  const FileTransferTab({super.key, required this.controller});
 
   @override
   State<FileTransferTab> createState() => _FileTransferTabState();
@@ -85,7 +81,7 @@ class _FileTransferTabState extends State<FileTransferTab>
 
   Future<void> _pickAndSendFile() async {
     if (_isPickingFile) return;
-    if (!widget.state.isSessionReady) {
+    if (!widget.controller.currentState.isSessionReady) {
       _showSnackBar(
         AppLocalizations.of(context)!.pleaseConnectToPeerFirst,
         Colors.orange,
@@ -140,32 +136,30 @@ class _FileTransferTabState extends State<FileTransferTab>
 
   @override
   Widget build(BuildContext context) {
-    final isConnected = widget.state.isSessionReady;
-    final theme = Theme.of(context);
-
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Connection Status Card
-            _buildConnectionStatusCard(isConnected, theme),
-            const SizedBox(height: 20),
-
-            // File Transfer Actions
-            _buildFileTransferActions(isConnected, theme),
-            const SizedBox(height: 20),
-
-            // Transfer Progress Section
-            _buildTransferProgressSection(theme),
-            const SizedBox(height: 20),
-
-            // Recent Files Section
-            _buildRecentFilesSection(theme),
-          ],
-        ),
-      ),
+    return StateBuilder(
+      controller: widget.controller,
+      shouldRebuild: (prev, curr) => curr.fileTransferFieldsDiffer(prev),
+      builder: (context, s) {
+        final isConnected = s.isSessionReady;
+        final theme = Theme.of(context);
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildConnectionStatusCard(isConnected, theme),
+                const SizedBox(height: 20),
+                _buildFileTransferActions(context, s, isConnected, theme),
+                const SizedBox(height: 20),
+                _buildTransferProgressSection(context, s, theme),
+                const SizedBox(height: 20),
+                _buildRecentFilesSection(context, s, theme),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -239,7 +233,12 @@ class _FileTransferTabState extends State<FileTransferTab>
     );
   }
 
-  Widget _buildFileTransferActions(bool isConnected, ThemeData theme) {
+  Widget _buildFileTransferActions(
+    BuildContext context,
+    WiFiDirectState s,
+    bool isConnected,
+    ThemeData theme,
+  ) {
     return Column(
       children: [
         // Send File Button
@@ -318,9 +317,9 @@ class _FileTransferTabState extends State<FileTransferTab>
               ),
               const SizedBox(height: 4),
               Text(
-                AppLocalizations.of(
-                  context,
-                )!.filesWillBeAutomaticallyReceived(_receiveDestinationLabel()),
+                AppLocalizations.of(context)!.filesWillBeAutomaticallyReceived(
+                  _receiveDestinationLabel(s),
+                ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
@@ -336,7 +335,7 @@ class _FileTransferTabState extends State<FileTransferTab>
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    value: widget.state.receiveDestination.mode,
+                    value: s.receiveDestination.mode,
                     isExpanded: true,
                     isDense: true,
                     items: [
@@ -353,8 +352,8 @@ class _FileTransferTabState extends State<FileTransferTab>
                       DropdownMenuItem(
                         value: 'custom',
                         child: Text(
-                          widget.state.receiveDestination.mode == 'custom'
-                              ? widget.state.receiveDestination.displayName
+                          s.receiveDestination.mode == 'custom'
+                              ? s.receiveDestination.displayName
                               : AppLocalizations.of(
                                   context,
                                 )!.chooseCustomFolder,
@@ -363,15 +362,14 @@ class _FileTransferTabState extends State<FileTransferTab>
                     ],
                     onChanged: (mode) async {
                       if (mode == null) return;
+                      final l10n = AppLocalizations.of(context)!;
                       final success = mode == 'custom'
                           ? await widget.controller
                                 .pickCustomReceiveDestination()
                           : await widget.controller.setReceiveDestination(mode);
                       if (!success && mounted) {
                         _showSnackBar(
-                          AppLocalizations.of(
-                            context,
-                          )!.receiveDestinationFailed,
+                          l10n.receiveDestinationFailed,
                           Colors.red,
                         );
                       }
@@ -386,8 +384,12 @@ class _FileTransferTabState extends State<FileTransferTab>
     );
   }
 
-  Widget _buildTransferProgressSection(ThemeData theme) {
-    final activeTransfers = widget.state.activeFileTransfers.values.toList()
+  Widget _buildTransferProgressSection(
+    BuildContext context,
+    WiFiDirectState s,
+    ThemeData theme,
+  ) {
+    final activeTransfers = s.activeFileTransfers.values.toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
     if (activeTransfers.isEmpty) {
@@ -508,8 +510,12 @@ class _FileTransferTabState extends State<FileTransferTab>
     );
   }
 
-  Widget _buildRecentFilesSection(ThemeData theme) {
-    final recentFiles = widget.state.recentFileTransfers;
+  Widget _buildRecentFilesSection(
+    BuildContext context,
+    WiFiDirectState s,
+    ThemeData theme,
+  ) {
+    final recentFiles = s.recentFileTransfers;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -684,7 +690,7 @@ class _FileTransferTabState extends State<FileTransferTab>
 
   String _fallbackSavedLocation(String filePath) {
     if (filePath.startsWith('content://')) {
-      return _receiveDestinationLabel();
+      return _receiveDestinationLabel(widget.controller.currentState);
     }
     final normalized = filePath.replaceAll('\\', '/');
     final separator = normalized.lastIndexOf('/');
@@ -718,11 +724,11 @@ class _FileTransferTabState extends State<FileTransferTab>
     };
   }
 
-  String _receiveDestinationLabel() {
+  String _receiveDestinationLabel(WiFiDirectState s) {
     final localizations = AppLocalizations.of(context)!;
-    return switch (widget.state.receiveDestination.mode) {
+    return switch (s.receiveDestination.mode) {
       'downloads' => localizations.downloadsFolder,
-      'custom' => widget.state.receiveDestination.displayName,
+      'custom' => s.receiveDestination.displayName,
       _ => localizations.appStorage,
     };
   }

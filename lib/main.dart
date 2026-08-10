@@ -107,7 +107,13 @@ class _KabelosHomePageState extends State<KabelosHomePage>
 
   void _initializeController() {
     _stateSubscription = _controller.stateStream.listen((newState) {
-      if (mounted) {
+      if (!mounted) return;
+      // Only trigger a parent-level rebuild when fields that affect the
+      // layout (tab visibility, status pill, foreground service) change.
+      // Per-tab rebuilding is handled by StateBuilder in each tab widget.
+      final prev = _state;
+      if (prev.settingsFieldsDiffer(newState) ||
+          prev.connectionFieldsDiffer(newState)) {
         setState(() {
           _state = newState;
         });
@@ -135,32 +141,29 @@ class _KabelosHomePageState extends State<KabelosHomePage>
   }
 
   List<Widget> _buildTabs() {
-    final tabs = <Widget>[
-      ConnectionTab(controller: _controller, state: _state),
-    ];
+    final tabs = <Widget>[ConnectionTab(controller: _controller)];
 
     if (_state.showPhotosTab) {
-      tabs.add(PhotoPickerTab(controller: _controller, state: _state));
+      tabs.add(PhotoPickerTab(controller: _controller));
     }
 
-    tabs.add(FileTransferTab(controller: _controller, state: _state));
+    tabs.add(FileTransferTab(controller: _controller));
 
     if (_state.showChatTab) {
-      tabs.add(ChatTab(controller: _controller, state: _state));
+      tabs.add(ChatTab(controller: _controller));
     }
 
     if (_state.showSpeedTestTab) {
-      tabs.add(SpeedTestTab(controller: _controller, state: _state));
+      tabs.add(SpeedTestTab(controller: _controller));
     }
 
     if (_state.showAudioTab) {
-      tabs.add(AudioTab(controller: _controller, state: _state));
+      tabs.add(AudioTab(controller: _controller));
     }
 
     tabs.add(
       SettingsTab(
         controller: _controller,
-        state: _state,
         onTabsVisibilityChanged: _rebuildTabs,
       ),
     );
