@@ -96,9 +96,20 @@ android {
 
     buildTypes {
         release {
+            // Enable R8 code shrinking and resource shrinking for smaller, optimized APKs.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                file("proguard-rules.pro")
+            )
+
             if (hasReleaseSigningConfig) {
                 signingConfig = signingConfigs.getByName("release")
             }
+
+            // Ensure release builds are not debuggable
+            isDebuggable = false
         }
     }
 }

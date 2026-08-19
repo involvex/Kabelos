@@ -24,7 +24,7 @@ dependencies:
 
   # Kabelos: QR code rendering and scanning for the identity helper
   qr_flutter: ^4.1.0
-  mobile_scanner: ^5.2.3
+  mobile_scanner: ^7.4.0
 
   # Kabelos: friendly permission prompts (Android 13+ NEARBY_WIFI_DEVICES, etc.)
   permission_handler: ^11.3.1
