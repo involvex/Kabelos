@@ -19,7 +19,7 @@ pluginManagement {
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
     // Use AGP 8.x compatible with Gradle 8.6 in CI for now; we'll migrate to AGP 9 in a dedicated branch.
-    id("com.android.application") version "8.4.2" apply false
+    id("com.android.application") version "8.6.0" apply false
     // Use Kotlin 1.9.20 to match embedded-kotlin expectations on this toolchain.
     id("org.jetbrains.kotlin.android") version "1.9.20" apply false
 }
