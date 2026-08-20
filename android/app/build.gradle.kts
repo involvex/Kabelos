@@ -36,6 +36,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    // Kotlin JVM target. Use legacy kotlinOptions for AGP 8.x compatibility.
+    // When migrating to AGP 9+, switch to the compilerOptions.kotlinOptions DSL.
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
