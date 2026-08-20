@@ -22,10 +22,22 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.44.0'
+      - name: Install Flutter SDK (git clone, retry)
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y git xz-utils unzip
+          FLUTTER_DIR="$HOME/flutter"
+          rm -rf "$FLUTTER_DIR"
+          for i in 1 2 3; do
+            git clone --depth 1 https://github.com/flutter/flutter.git "$FLUTTER_DIR" && break || { echo "Clone failed, retrying..."; sleep 5; }
+            if [ "$i" -eq 3 ]; then exit 1; fi
+          done
+          cd "$FLUTTER_DIR"
+          git fetch --tags --quiet || true
+          if git rev-parse --verify "3.44.0" >/dev/null 2>&1; then git checkout 3.44.0; else git checkout stable; fi
+          echo "$FLUTTER_DIR/bin" >> "$GITHUB_PATH"
+        shell: bash
 
       - name: Flutter --version
         run: flutter --version
