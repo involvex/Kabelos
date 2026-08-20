@@ -3,7 +3,7 @@ name: Toolchain upgrade validation
 on:
   pull_request:
     branches:
-      - upgrade/toolchain-wip
+      - main
 
 jobs:
   validate_toolchain:
@@ -37,7 +37,7 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew wrapper --gradle-version 9.1 --distribution-type all || true
+          ./gradlew wrapper --gradle-version 9.1 --distribution-type bin || true
 
       - name: Assemble Debug (validate build)
         working-directory: android
