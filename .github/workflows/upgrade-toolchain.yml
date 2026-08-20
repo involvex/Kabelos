@@ -36,12 +36,26 @@ jobs:
       - name: Run Gradle wrapper update (9.1)
         working-directory: android
         run: |
-          chmod +x gradlew
-          ./gradlew wrapper --gradle-version 9.1 --distribution-type bin || true
+          set -eux
+          pwd
+          ls -la
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+            ./gradlew wrapper --gradle-version 9.1 --distribution-type bin || true
+          else
+            echo "gradlew not found in android/; skipping wrapper update"
+          fi
 
       - name: Assemble Debug (validate build)
         working-directory: android
-        run: ./gradlew --no-daemon clean assembleDebug
+        run: |
+          set -eux
+          if [ -f gradlew ]; then
+            ./gradlew --no-daemon clean assembleDebug
+          else
+            # Fallback to system gradle if gradlew is not present
+            gradle --no-daemon clean assembleDebug
+          fi
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
