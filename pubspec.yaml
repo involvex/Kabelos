@@ -2,7 +2,7 @@ name: kabelos
 description: "Kabelos - share files between nearby devices over Wi-Fi Direct."
 publish_to: 'none'
 
-version: 3.0.0+3001
+version: 3.0.1+3101
 
 environment:
   sdk: ^3.8.1
