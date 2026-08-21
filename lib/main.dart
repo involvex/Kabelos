@@ -251,7 +251,10 @@ class _KabelosHomePageState extends State<KabelosHomePage>
   @override
   Widget build(BuildContext context) {
     if (_checkingOnboarding || !_onboardingComplete) {
-      return OnboardingScreen(onComplete: _markOnboardingComplete);
+      return OnboardingScreen(
+        onComplete: _markOnboardingComplete,
+        controller: _controller,
+      );
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(

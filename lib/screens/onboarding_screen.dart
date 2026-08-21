@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:kabelos/controllers/wifi_direct_controller.dart';
 import 'package:kabelos/l10n/app_localizations.dart';
+import 'package:kabelos/utils/app_logger.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
+  final WiFiDirectController controller;
 
-  const OnboardingScreen({super.key, required this.onComplete});
+  const OnboardingScreen({
+    super.key,
+    required this.onComplete,
+    required this.controller,
+  });
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -15,10 +22,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
   bool _checking = false;
   bool _checkPassed = false;
+  bool _step2PermissionGranted = false;
 
   static const int _totalSteps = 4;
 
   void _nextPage() {
+    if (_currentPage == 1 && !_step2PermissionGranted) {
+      _requestAndAdvance();
+      return;
+    }
     if (_currentPage < _totalSteps - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -27,6 +39,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     } else {
       _finishOnboarding();
     }
+  }
+
+  Future<void> _requestAndAdvance() async {
+    try {
+      await widget.controller.requestPermissions();
+      setState(() => _step2PermissionGranted = true);
+    } catch (e) {
+      AppLogger.info('Permission request failed: $e');
+    }
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   void _finishOnboarding() async {
@@ -146,14 +171,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     SizedBox(
                       height: 48,
                       child: ElevatedButton(
-                        onPressed: _nextPage,
+                        onPressed: _currentPage == 1 && !_step2PermissionGranted
+                            ? _requestAndAdvance
+                            : _nextPage,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
+                          backgroundColor:
+                              _currentPage == 1 && _step2PermissionGranted
+                              ? Colors.green
+                              : null,
                         ),
-                        child: Text(
-                          _currentPage == _totalSteps - 1
-                              ? l10n.onboardingFinish
-                              : l10n.onboardingContinue,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (_currentPage == 1 && _step2PermissionGranted)
+                              const Icon(Icons.check_circle, size: 20),
+                            if (_currentPage == 1 && _step2PermissionGranted)
+                              const SizedBox(width: 8),
+                            Text(
+                              _currentPage == 1 && _step2PermissionGranted
+                                  ? 'Done'
+                                  : _currentPage == _totalSteps - 1
+                                  ? l10n.onboardingFinish
+                                  : l10n.onboardingContinue,
+                            ),
+                          ],
                         ),
                       ),
                     ),

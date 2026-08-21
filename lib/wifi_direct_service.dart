@@ -1172,6 +1172,14 @@ class WiFiDirectService {
     }
   }
 
+  Future<void> requestPermissions() async {
+    try {
+      await _channel.invokeMethod('requestPermissions');
+    } catch (e) {
+      throw Exception('Failed to request permissions: $e');
+    }
+  }
+
   void dispose() {
     _eventController.close();
   }

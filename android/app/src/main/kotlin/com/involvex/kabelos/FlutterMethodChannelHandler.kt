@@ -271,6 +271,10 @@ class FlutterMethodChannelHandler(
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 result.success("Opened app settings")
             }
+"requestPermissions" -> {
+                permissionManager.checkPermissions()
+                result.success(true)
+            }
             else -> {
                 result.notImplemented()
             }
