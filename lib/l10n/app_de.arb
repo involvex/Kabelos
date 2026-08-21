@@ -227,6 +227,7 @@
   "photoPickerSelectedCount": "{count} Foto(s) ausgewählt",
   "photoPickerSend": "{count} Foto(s) senden",
   "photoPickerPermissionPhotos": "Fotos-Berechtigung nötig für Zugriff auf Ihre Bibliothek",
+  "photoPickerSendNotConnected": "Bitte zuerst ein Gerät verbinden",
 
   "deviceInfoTitle": "Geräteinformationen",
   "deviceInfoSubtitle": "Details zu diesem Gerät und der Wi-Fi Direct Verbindung",

@@ -57,10 +57,7 @@ class MainActivity : FlutterActivity(), WiFiDirectManager.ConnectionListener {
             permissionManager
         )
         
-        methodChannel.setMethodCallHandler(methodChannelHandler)
-        
-        // Check permissions after initialization
-        permissionManager.checkPermissions()
+methodChannel.setMethodCallHandler(methodChannelHandler)
     }
     
     // Lifecycle methods

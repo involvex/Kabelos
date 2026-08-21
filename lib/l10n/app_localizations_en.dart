@@ -746,6 +746,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Photos permission needed to access your library';
 
   @override
+  String get photoPickerSendNotConnected => 'Connect to a peer first';
+
+  @override
   String get deviceInfoTitle => 'Device Information';
 
   @override

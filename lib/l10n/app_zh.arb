@@ -229,6 +229,7 @@
   "photoPickerSelectedCount": "已选择 {count} 张照片",
   "photoPickerSend": "发送 {count} 张照片",
   "photoPickerPermissionPhotos": "需要照片权限访问您的相册",
+  "photoPickerSendNotConnected": "请先连接设备",
 
   "deviceInfoTitle": "设备信息",
   "deviceInfoSubtitle": "关于此设备和 Wi-Fi Direct 连接的详情",

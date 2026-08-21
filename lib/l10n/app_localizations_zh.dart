@@ -729,6 +729,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get photoPickerPermissionPhotos => '需要照片权限访问您的相册';
 
   @override
+  String get photoPickerSendNotConnected => '请先连接设备';
+
+  @override
   String get deviceInfoTitle => '设备信息';
 
   @override

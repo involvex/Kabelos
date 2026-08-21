@@ -475,7 +475,13 @@ class WiFiDirectManager(
                         "reasonName" to reasonName(reasonCode)
                     )
                 )
-                if (nativeState == STATE_CONNECTING && reasonCode == WifiP2pManager.BUSY) {
+if (nativeState == STATE_CONNECTING && reasonCode == WifiP2pManager.BUSY) {
+                    setNativeState(STATE_USER_STOPPED_SCAN, "stopPeerDiscovery:BUSY")
+                    handleDiscoveryStateChanged(
+                        WifiP2pManager.WIFI_P2P_DISCOVERY_STOPPED,
+                        "stopPeerDiscovery:BUSY",
+                        false
+                    )
                     result.success("Discovery stop deferred while connection setup is pending")
                     return
                 }

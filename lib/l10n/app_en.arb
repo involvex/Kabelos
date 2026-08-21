@@ -835,6 +835,10 @@
   "@photoPickerPermissionPhotos": {
     "description": "Photos permission rationale"
   },
+  "photoPickerSendNotConnected": "Connect to a peer first",
+  "@photoPickerSendNotConnected": {
+    "description": "Snackbar shown when user taps Send before a session is established"
+  },
 
   "deviceInfoTitle": "Device Information",
   "@deviceInfoTitle": {

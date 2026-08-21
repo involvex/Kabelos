@@ -1432,6 +1432,12 @@ abstract class AppLocalizations {
   /// **'Photos permission needed to access your library'**
   String get photoPickerPermissionPhotos;
 
+  /// Snackbar shown when user taps Send before a session is established
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to a peer first'**
+  String get photoPickerSendNotConnected;
+
   /// Device info screen title
   ///
   /// In en, this message translates to:

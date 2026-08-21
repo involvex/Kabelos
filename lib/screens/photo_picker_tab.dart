@@ -17,6 +17,7 @@ class PhotoPickerTab extends StatefulWidget {
 
 class _PhotoPickerTabState extends State<PhotoPickerTab> {
   List<File> _selectedPhotos = [];
+  bool _isSending = false;
 
   Future<void> _selectPhotos() async {
     final status = await Permission.photos.request();
@@ -41,10 +42,46 @@ class _PhotoPickerTabState extends State<PhotoPickerTab> {
     }
   }
 
-  void _sendPhotos() {
+  Future<void> _sendPhotos() async {
     if (_selectedPhotos.isEmpty) return;
-    for (final photo in _selectedPhotos) {
-      widget.controller.sendFile(photo.path);
+
+    final state = widget.controller.currentState;
+    if (!state.isSessionReady) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.photoPickerSendNotConnected,
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isSending = true);
+    try {
+      for (final photo in _selectedPhotos) {
+        await widget.controller.sendFile(photo.path);
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(
+              context,
+            )!.photoPickerSend(_selectedPhotos.length),
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Send failed: $e')));
+    } finally {
+      if (mounted) {
+        setState(() => _isSending = false);
+      }
     }
   }
 
@@ -167,9 +204,22 @@ class _PhotoPickerTabState extends State<PhotoPickerTab> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton.icon(
-              onPressed: _sendPhotos,
-              icon: const Icon(Icons.send),
-              label: Text(l10n.photoPickerSend(_selectedPhotos.length)),
+              onPressed: _isSending ? null : _sendPhotos,
+              icon: _isSending
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.send),
+              label: Text(
+                _isSending
+                    ? 'Sending...'
+                    : l10n.photoPickerSend(_selectedPhotos.length),
+              ),
             ),
           ),
         const SizedBox(height: 16),

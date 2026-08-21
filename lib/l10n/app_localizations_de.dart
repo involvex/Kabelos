@@ -752,6 +752,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Fotos-Berechtigung nötig für Zugriff auf Ihre Bibliothek';
 
   @override
+  String get photoPickerSendNotConnected => 'Bitte zuerst ein Gerät verbinden';
+
+  @override
   String get deviceInfoTitle => 'Geräteinformationen';
 
   @override
