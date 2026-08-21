@@ -275,6 +275,9 @@ class FlutterMethodChannelHandler(
                 permissionManager.checkPermissions()
                 result.success(true)
             }
+            "hasPermissions" -> {
+                result.success(permissionManager.hasPermissions())
+            }
             else -> {
                 result.notImplemented()
             }

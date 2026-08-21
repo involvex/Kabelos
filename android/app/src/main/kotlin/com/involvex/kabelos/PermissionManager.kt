@@ -18,13 +18,30 @@ class PermissionManager(
 
     private var recordAudioCallback: ((Boolean) -> Unit)? = null
     
-    fun checkPermissions() {
+fun checkPermissions() {
         val permissions = mutableListOf<String>()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.NEARBY_WIFI_DEVICES) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.NEARBY_WIFI_DEVICES)
             }
+        } else {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.RECORD_AUDIO)
         }
         
         if (permissions.isNotEmpty()) {
@@ -37,6 +54,24 @@ class PermissionManager(
         } else {
             DiagnosticsLogger.log("permissions", "Required permissions already granted")
         }
+    }
+
+    fun hasPermissions(): Boolean {
+        val allGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.NEARBY_WIFI_DEVICES) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        }
+        DiagnosticsLogger.log(
+            "permissions",
+            "hasPermissions check",
+            mapOf("allGranted" to allGranted)
+        )
+        return allGranted
     }
     
     fun handlePermissionResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -108,12 +143,16 @@ class PermissionManager(
         )
     }
 
-    private fun permissionToCapability(permission: String): String {
+private fun permissionToCapability(permission: String): String {
         return when (permission) {
             Manifest.permission.NEARBY_WIFI_DEVICES -> "Nearby Wi-Fi devices"
+            Manifest.permission.ACCESS_FINE_LOCATION -> "Nearby devices (location)"
             Manifest.permission.RECORD_AUDIO -> "Microphone"
+            Manifest.permission.POST_NOTIFICATIONS -> "Notifications"
+            Manifest.permission.READ_MEDIA_IMAGES -> "Photos"
             else -> permission
         }
+    }
     }
 }
 

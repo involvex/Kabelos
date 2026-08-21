@@ -1180,6 +1180,15 @@ class WiFiDirectService {
     }
   }
 
+  Future<bool> hasPermissions() async {
+    try {
+      final bool result = await _channel.invokeMethod('hasPermissions');
+      return result;
+    } catch (e) {
+      return false;
+    }
+  }
+
   void dispose() {
     _eventController.close();
   }

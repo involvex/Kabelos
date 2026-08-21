@@ -23,10 +23,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _checking = false;
   bool _checkPassed = false;
   bool _step2PermissionGranted = false;
+  bool _step2Requesting = false;
 
   static const int _totalSteps = 4;
 
   void _nextPage() {
+    if (_currentPage == 1 && _step2Requesting) return;
     if (_currentPage == 1 && !_step2PermissionGranted) {
       _requestAndAdvance();
       return;
@@ -42,12 +44,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _requestAndAdvance() async {
+    if (_step2Requesting) return;
+    setState(() => _step2Requesting = true);
+
     try {
       await widget.controller.requestPermissions();
-      setState(() => _step2PermissionGranted = true);
     } catch (e) {
       AppLogger.info('Permission request failed: $e');
     }
+
+    const maxWait = Duration(seconds: 20);
+    const pollInterval = Duration(milliseconds: 200);
+    final deadline = DateTime.now().add(maxWait);
+    bool allGranted = false;
+
+    while (DateTime.now().isBefore(deadline)) {
+      await Future.delayed(pollInterval);
+      if (!mounted) return;
+      allGranted = await widget.controller.hasPermissions();
+      if (allGranted) break;
+    }
+
+    if (!mounted) return;
+    setState(() {
+      _step2PermissionGranted = allGranted;
+      _step2Requesting = false;
+    });
+
     _pageController.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -184,12 +207,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (_currentPage == 1 && _step2PermissionGranted)
-                              const Icon(Icons.check_circle, size: 20),
-                            if (_currentPage == 1 && _step2PermissionGranted)
+                            if (_currentPage == 1 && _step2Requesting)
+                              const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            if (_currentPage == 1 && _step2Requesting)
                               const SizedBox(width: 8),
                             Text(
-                              _currentPage == 1 && _step2PermissionGranted
+                              _currentPage == 1 && _step2Requesting
+                                  ? 'Requesting...'
+                                  : _currentPage == 1 && _step2PermissionGranted
                                   ? 'Done'
                                   : _currentPage == _totalSteps - 1
                                   ? l10n.onboardingFinish

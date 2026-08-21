@@ -815,6 +815,7 @@ class WiFiDirectController {
       _service.openNearbyDevicesSettings();
   Future<void> openAppSettings() => _service.openAppSettings();
   Future<void> requestPermissions() => _service.requestPermissions();
+  Future<bool> hasPermissions() => _service.hasPermissions();
 
   // Kabelos: Tab visibility persistence
   Future<void> saveTabVisibility() async {
