@@ -17,8 +17,8 @@ class PermissionManager(
     private val REQUEST_RECORD_AUDIO = 1003
 
     private var recordAudioCallback: ((Boolean) -> Unit)? = null
-    
-fun checkPermissions() {
+
+    fun checkPermissions() {
         val permissions = mutableListOf<String>()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -43,7 +43,7 @@ fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.RECORD_AUDIO)
         }
-        
+
         if (permissions.isNotEmpty()) {
             DiagnosticsLogger.log(
                 "permissions",
@@ -73,7 +73,7 @@ fun checkPermissions() {
         )
         return allGranted
     }
-    
+
     fun handlePermissionResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == REQUEST_RECORD_AUDIO) {
             val granted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
@@ -106,17 +106,27 @@ fun checkPermissions() {
                     "permissions" to deniedPermissions,
                     "capabilities" to deniedPermissions.map { permissionToCapability(it) }
                 ))
+                val audioDenied = deniedPermissions.contains(Manifest.permission.RECORD_AUDIO)
+                if (audioDenied) {
+                    recordAudioCallback?.invoke(false)
+                    recordAudioCallback = null
+                }
             } else {
                 DiagnosticsLogger.log("permissions", "Permissions granted")
+                val audioWasPending = permissions.contains(Manifest.permission.RECORD_AUDIO)
+                if (audioWasPending) {
+                    recordAudioCallback?.invoke(true)
+                    recordAudioCallback = null
+                }
             }
         }
     }
-    
+
     fun hasNearbyWifiDevicesPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(activity, Manifest.permission.NEARBY_WIFI_DEVICES) == PackageManager.PERMISSION_GRANTED
         } else {
-            true
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         }
     }
 
@@ -143,7 +153,7 @@ fun checkPermissions() {
         )
     }
 
-private fun permissionToCapability(permission: String): String {
+    private fun permissionToCapability(permission: String): String {
         return when (permission) {
             Manifest.permission.NEARBY_WIFI_DEVICES -> "Nearby Wi-Fi devices"
             Manifest.permission.ACCESS_FINE_LOCATION -> "Nearby devices (location)"
@@ -153,6 +163,4 @@ private fun permissionToCapability(permission: String): String {
             else -> permission
         }
     }
-    }
 }
-
