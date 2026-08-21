@@ -52,17 +52,12 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
-        // Flutter owns ABI filters for split builds. For other builds, keep
-        // unsupported armeabi-v7a out because no libopus binary is bundled.
-        if (!splitPerAbi) {
-            ndk {
-                abiFilters += supportedAbis
-            }
+        // CMake-level abiFilter (below) ensures only arm64-v8a and x86_64 are built.
+        // Packaging (below) excludes armeabi-v7a from jniLibs.
 
-            externalNativeBuild {
-                cmake {
-                    abiFilters += supportedAbis
-                }
+        externalNativeBuild {
+            cmake {
+                abiFilters += supportedAbis
             }
         }
     }
